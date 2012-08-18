@@ -1,0 +1,28 @@
+= oopm
+
+* {Homepage}[https://github.com/jamestunnell/oopm]
+* {Issues}[https://github.com/jamestunnell/oopm/issues]
+* {Documentation}[http://rubydoc.info/gems/oopm/frames]
+* {Email}[mailto:jamestunnell at lavabit.com]
+
+== Description
+
+A library defining a model of an object-oriented processor (as in general prupose processor, aka CPU). For simulation in software before implementing in hardware. Could be used to layer additional virtual processors on top of real processors.
+
+== Features
+
+== Examples
+
+  require 'oopm'
+
+== Requirements
+
+== Install
+
+  $ gem install oopm
+
+== Copyright
+
+Copyright (c) 2012 James Tunnell
+
+See LICENSE.txt for details.
