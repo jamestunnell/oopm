@@ -1,0 +1,7 @@
+require 'treetop'
+
+grammar Number
+  rule number
+    ([\d]* "."? [\d]+) / ([\d]+)
+  end
+end

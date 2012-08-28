@@ -1,0 +1,7 @@
+grammar BinaryOperation
+  include Number
+
+  rule binary_operation
+    number " "* ("+" / "-" / "*" / "/" / "%" / "||" / "&&" / "==" / "|" / "&") " "* number
+  end
+end
