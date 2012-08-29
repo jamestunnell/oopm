@@ -1,7 +1,17 @@
 grammar BinaryOperation
   include Number
+  include Whitespace
 
   rule binary_operation
-    number " "* ("+" / "-" / "*" / "/" / "%" / "||" / "&&" / "==" / "|" / "&") " "* number
+    operand whitespace binary_operator whitespace operand
   end
+
+  rule binary_operator
+    ("+" / "-" / "*" / "/" / "%" / "||" / "&&" / "==" / "|" / "&")
+  end
+  
+  rule operand
+    number
+  end
+  
 end
