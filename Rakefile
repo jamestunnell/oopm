@@ -31,3 +31,19 @@ YARD::Rake::YardocTask.new
 task :doc => :yard
 
 require "bundler/gem_tasks"
+
+task :make_parsers do
+  parsing_path_rel = 'lib/oopm/parsing'
+  project_root = Dir.getwd
+  
+  Dir.chdir parsing_path_rel
+  grammars = Dir.glob('*.treetop')
+  
+  puts "Making parsers from .treetop files in #{project_root}/#{parsing_path_rel}"
+  grammars.each do |grammar|
+    puts "making parser from #{grammar}"
+    `tt #{grammar}`
+  end
+  
+  Dir.chdir project_root
+end

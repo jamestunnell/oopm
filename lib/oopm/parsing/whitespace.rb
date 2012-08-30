@@ -45,3 +45,4 @@ end
 class WhitespaceParser < Treetop::Runtime::CompiledParser
   include Whitespace
 end
+

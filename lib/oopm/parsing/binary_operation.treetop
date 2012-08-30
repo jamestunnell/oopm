@@ -1,17 +1,12 @@
 grammar BinaryOperation
-  include Number
+  include AnyObject
   include Whitespace
 
   rule binary_operation
-    operand whitespace binary_operator whitespace operand
+    (any_object whitespace binary_operator whitespace any_object)
   end
 
   rule binary_operator
     ("+" / "-" / "*" / "/" / "%" / "||" / "&&" / "==" / "|" / "&")
   end
-  
-  rule operand
-    number
-  end
-  
 end
