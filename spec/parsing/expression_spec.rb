@@ -76,6 +76,12 @@ describe ExpressionParser do
     end
   end
   
+  it "should parse a combination of expressions (grouped w/ method calls)" do
+    @parser.parse('my_object.does(1,"hello world", whats_up)').should be_true
+    @parser.parse('(2).does("a good thing")').should be_true
+    @parser.parse('(xyz).is_a(5.is_good,"a good thing")').should be_true
+  end
+
   #it "should parse a binary operation" do
   #  @parser.parse('1 + 2').should be_true
   #end
