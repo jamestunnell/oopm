@@ -17,8 +17,10 @@ describe AnyObjectParser do
     @parser.parse('_abc123').should be_true
   end
 
-  it "should parse valid strings" do
-    #@parser.parse("\"hello world\"").should be_true
-    #@parser.parse("\"What a wonderful world!!!\"").should be_true
+  it "should parse valid string literals" do
+    @parser.parse('"hello world"').should be_true
+    @parser.parse('"\\"hello world\\""').should be_true
+    @parser.parse("'hello world'").should be_true
+    @parser.parse("'\\'hello world\\''").should be_true
   end  
 end

@@ -8,6 +8,8 @@ module AnyObject
     @root ||= :any_object
   end
 
+  include StringLiteral
+
   include Number
 
   include Name
@@ -24,16 +26,21 @@ module AnyObject
     end
 
     i0 = index
-    r1 = _nt_number
+    r1 = _nt_string_literal
     if r1
       r0 = r1
     else
-      r2 = _nt_name
+      r2 = _nt_number
       if r2
         r0 = r2
       else
-        @index = i0
-        r0 = nil
+        r3 = _nt_name
+        if r3
+          r0 = r3
+        else
+          @index = i0
+          r0 = nil
+        end
       end
     end
 
