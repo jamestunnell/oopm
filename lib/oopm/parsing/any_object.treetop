@@ -1,0 +1,8 @@
+grammar AnyObject
+  include Number
+  include Name
+  
+  rule any_object
+    (number / name)
+  end
+end

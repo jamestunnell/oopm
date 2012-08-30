@@ -8,12 +8,12 @@ module BinaryOperation
     @root ||= :binary_operation
   end
 
-  include Number
+  include AnyObject
 
   include Whitespace
 
   module BinaryOperation0
-    def operand1
+    def any_object1
       elements[0]
     end
 
@@ -29,7 +29,7 @@ module BinaryOperation
       elements[3]
     end
 
-    def operand2
+    def any_object2
       elements[4]
     end
   end
@@ -46,7 +46,7 @@ module BinaryOperation
     end
 
     i0, s0 = index, []
-    r1 = _nt_operand
+    r1 = _nt_any_object
     s0 << r1
     if r1
       r2 = _nt_whitespace
@@ -58,7 +58,7 @@ module BinaryOperation
           r4 = _nt_whitespace
           s0 << r4
           if r4
-            r5 = _nt_operand
+            r5 = _nt_any_object
             s0 << r5
           end
         end
@@ -207,26 +207,9 @@ module BinaryOperation
     r0
   end
 
-  def _nt_operand
-    start_index = index
-    if node_cache[:operand].has_key?(index)
-      cached = node_cache[:operand][index]
-      if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
-        @index = cached.interval.end
-      end
-      return cached
-    end
-
-    r0 = _nt_number
-
-    node_cache[:operand][start_index] = r0
-
-    r0
-  end
-
 end
 
 class BinaryOperationParser < Treetop::Runtime::CompiledParser
   include BinaryOperation
 end
+

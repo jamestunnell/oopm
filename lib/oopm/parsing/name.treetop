@@ -1,0 +1,5 @@
+grammar Name
+  rule name
+    ([_a-zA-z] [_a-zA-z0-9]*)
+  end
+end
