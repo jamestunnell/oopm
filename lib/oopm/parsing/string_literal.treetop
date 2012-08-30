@@ -1,0 +1,13 @@
+grammar StringLiteral
+  rule string_literal
+    (double_quoted / single_quoted )
+  end
+
+  rule single_quoted
+    ('\'' (('\\\'') / (!'\'' .))* '\'')
+  end
+  
+  rule double_quoted
+    ('"' (('\"') / (!'"' .))* '"')
+  end
+end

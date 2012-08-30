@@ -1,8 +1,9 @@
 grammar AnyObject
+  include String
   include Number
   include Name
   
   rule any_object
-    (number / name)
+    (string / number / name)
   end
 end
