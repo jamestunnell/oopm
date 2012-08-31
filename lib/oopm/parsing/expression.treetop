@@ -3,26 +3,26 @@ grammar Expression
   include AnyObject
   
   rule expression
-    (whitespace (grouped_expression / any_object) (method_call)? whitespace)
+    ((grouped_expression / any_object) (method_call / (whitespace binary_operation))?)
   end
 
   rule grouped_expression
     ("(" whitespace expression whitespace ")")
   end
 
-#  rule binary_operation
-#    (&(expression) &(whitespace) &(binary_operator) &(whitespace) expression)
-#  end
+  rule binary_operation
+    (binary_operator whitespace expression)
+  end
 
-#  rule binary_operator
-#    ("+" / "-" / "*" / "/" / "%" / "||" / "&&" / "==" / "|" / "&")
-#  end
+  rule binary_operator
+    ("+" / "-" / "*" / "/" / "%" / "||" / "&&" / "==" / "=" / "|" / "&" / "<<")
+  end
   
   rule method_call
-    ("." name ("(" method_args? ")")?)
+    ("." name ("(" whitespace method_args? whitespace ")")?)
   end
   
   rule method_args
-    (whitespace expression whitespace ("," whitespace expression whitespace)* whitespace)
+    (expression whitespace ("," whitespace expression whitespace)*)
   end
 end
