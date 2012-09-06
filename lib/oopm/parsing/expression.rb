@@ -8,21 +8,18 @@ module Expression
     @root ||= :expression
   end
 
-  include Whitespace
-
   include AnyObject
 
   module Expression0
-    def whitespace
-      elements[0]
-    end
-
     def binary_operation
       elements[1]
     end
   end
 
   module Expression1
+    def action
+      elements[1]
+    end
   end
 
   def _nt_expression
@@ -52,37 +49,50 @@ module Expression
     end
     s0 << r1
     if r1
-      i5 = index
-      r6 = _nt_method_call
-      if r6
-        r5 = r6
-      else
-        i7, s7 = index, []
-        r8 = _nt_whitespace
-        s7 << r8
-        if r8
-          r9 = _nt_binary_operation
-          s7 << r9
-        end
-        if s7.last
-          r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
-          r7.extend(Expression0)
+      s4, i4 = [], index
+      loop do
+        i5 = index
+        r6 = _nt_method_call
+        if r6
+          r5 = r6
         else
-          @index = i7
-          r7 = nil
+          i7, s7 = index, []
+          s8, i8 = [], index
+          loop do
+            r9 = _nt_whitespace
+            if r9
+              s8 << r9
+            else
+              break
+            end
+          end
+          r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
+          s7 << r8
+          if r8
+            r10 = _nt_binary_operation
+            s7 << r10
+          end
+          if s7.last
+            r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
+            r7.extend(Expression0)
+          else
+            @index = i7
+            r7 = nil
+          end
+          if r7
+            r5 = r7
+          else
+            @index = i5
+            r5 = nil
+          end
         end
-        if r7
-          r5 = r7
+        if r5
+          s4 << r5
         else
-          @index = i5
-          r5 = nil
+          break
         end
       end
-      if r5
-        r4 = r5
-      else
-        r4 = instantiate_node(SyntaxNode,input, index...index)
-      end
+      r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
       s0 << r4
     end
     if s0.last
@@ -99,16 +109,8 @@ module Expression
   end
 
   module GroupedExpression0
-    def whitespace1
-      elements[1]
-    end
-
     def expression
       elements[2]
-    end
-
-    def whitespace2
-      elements[3]
     end
 
   end
@@ -134,23 +136,41 @@ module Expression
     end
     s0 << r1
     if r1
-      r2 = _nt_whitespace
+      s2, i2 = [], index
+      loop do
+        r3 = _nt_whitespace
+        if r3
+          s2 << r3
+        else
+          break
+        end
+      end
+      r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
       s0 << r2
       if r2
-        r3 = _nt_expression
-        s0 << r3
-        if r3
-          r4 = _nt_whitespace
-          s0 << r4
-          if r4
+        r4 = _nt_expression
+        s0 << r4
+        if r4
+          s5, i5 = [], index
+          loop do
+            r6 = _nt_whitespace
+            if r6
+              s5 << r6
+            else
+              break
+            end
+          end
+          r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
+          s0 << r5
+          if r5
             if has_terminal?(")", false, index)
-              r5 = instantiate_node(SyntaxNode,input, index...(index + 1))
+              r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
               @index += 1
             else
               terminal_parse_failure(")")
-              r5 = nil
+              r7 = nil
             end
-            s0 << r5
+            s0 << r7
           end
         end
       end
@@ -173,10 +193,6 @@ module Expression
       elements[0]
     end
 
-    def whitespace
-      elements[1]
-    end
-
     def expression
       elements[2]
     end
@@ -197,11 +213,20 @@ module Expression
     r1 = _nt_binary_operator
     s0 << r1
     if r1
-      r2 = _nt_whitespace
+      s2, i2 = [], index
+      loop do
+        r3 = _nt_whitespace
+        if r3
+          s2 << r3
+        else
+          break
+        end
+      end
+      r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
       s0 << r2
       if r2
-        r3 = _nt_expression
-        s0 << r3
+        r4 = _nt_expression
+        s0 << r4
       end
     end
     if s0.last
@@ -370,18 +395,14 @@ module Expression
   end
 
   module MethodCall0
-    def whitespace1
-      elements[1]
-    end
-
-    def whitespace2
-      elements[3]
+    def method_args
+      elements[2]
     end
 
   end
 
   module MethodCall1
-    def name
+    def method_name
       elements[1]
     end
 
@@ -421,28 +442,46 @@ module Expression
         end
         s4 << r5
         if r5
-          r6 = _nt_whitespace
+          s6, i6 = [], index
+          loop do
+            r7 = _nt_whitespace
+            if r7
+              s6 << r7
+            else
+              break
+            end
+          end
+          r6 = instantiate_node(SyntaxNode,input, i6...index, s6)
           s4 << r6
           if r6
-            r8 = _nt_method_args
-            if r8
-              r7 = r8
+            r9 = _nt_method_args
+            if r9
+              r8 = r9
             else
-              r7 = instantiate_node(SyntaxNode,input, index...index)
+              r8 = instantiate_node(SyntaxNode,input, index...index)
             end
-            s4 << r7
-            if r7
-              r9 = _nt_whitespace
-              s4 << r9
-              if r9
+            s4 << r8
+            if r8
+              s10, i10 = [], index
+              loop do
+                r11 = _nt_whitespace
+                if r11
+                  s10 << r11
+                else
+                  break
+                end
+              end
+              r10 = instantiate_node(SyntaxNode,input, i10...index, s10)
+              s4 << r10
+              if r10
                 if has_terminal?(")", false, index)
-                  r10 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                  r12 = instantiate_node(SyntaxNode,input, index...(index + 1))
                   @index += 1
                 else
                   terminal_parse_failure(")")
-                  r10 = nil
+                  r12 = nil
                 end
-                s4 << r10
+                s4 << r12
               end
             end
           end
@@ -476,17 +515,10 @@ module Expression
   end
 
   module MethodArgs0
-    def whitespace1
-      elements[1]
-    end
-
     def expression
       elements[2]
     end
 
-    def whitespace2
-      elements[3]
-    end
   end
 
   module MethodArgs1
@@ -494,10 +526,9 @@ module Expression
       elements[0]
     end
 
-    def whitespace
-      elements[1]
+    def args
+      elements[2]
     end
-
   end
 
   def _nt_method_args
@@ -515,47 +546,74 @@ module Expression
     r1 = _nt_expression
     s0 << r1
     if r1
-      r2 = _nt_whitespace
+      s2, i2 = [], index
+      loop do
+        r3 = _nt_whitespace
+        if r3
+          s2 << r3
+        else
+          break
+        end
+      end
+      r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
       s0 << r2
       if r2
-        s3, i3 = [], index
+        s4, i4 = [], index
         loop do
-          i4, s4 = index, []
+          i5, s5 = index, []
           if has_terminal?(",", false, index)
-            r5 = instantiate_node(SyntaxNode,input, index...(index + 1))
+            r6 = instantiate_node(SyntaxNode,input, index...(index + 1))
             @index += 1
           else
             terminal_parse_failure(",")
-            r5 = nil
+            r6 = nil
           end
-          s4 << r5
-          if r5
-            r6 = _nt_whitespace
-            s4 << r6
-            if r6
-              r7 = _nt_expression
-              s4 << r7
-              if r7
-                r8 = _nt_whitespace
-                s4 << r8
+          s5 << r6
+          if r6
+            s7, i7 = [], index
+            loop do
+              r8 = _nt_whitespace
+              if r8
+                s7 << r8
+              else
+                break
+              end
+            end
+            r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
+            s5 << r7
+            if r7
+              r9 = _nt_expression
+              s5 << r9
+              if r9
+                s10, i10 = [], index
+                loop do
+                  r11 = _nt_whitespace
+                  if r11
+                    s10 << r11
+                  else
+                    break
+                  end
+                end
+                r10 = instantiate_node(SyntaxNode,input, i10...index, s10)
+                s5 << r10
               end
             end
           end
-          if s4.last
-            r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
-            r4.extend(MethodArgs0)
+          if s5.last
+            r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
+            r5.extend(MethodArgs0)
           else
-            @index = i4
-            r4 = nil
+            @index = i5
+            r5 = nil
           end
-          if r4
-            s3 << r4
+          if r5
+            s4 << r5
           else
             break
           end
         end
-        r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
-        s0 << r3
+        r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
+        s0 << r4
       end
     end
     if s0.last
@@ -567,6 +625,29 @@ module Expression
     end
 
     node_cache[:method_args][start_index] = r0
+
+    r0
+  end
+
+  def _nt_whitespace
+    start_index = index
+    if node_cache[:whitespace].has_key?(index)
+      cached = node_cache[:whitespace][index]
+      if cached
+        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        @index = cached.interval.end
+      end
+      return cached
+    end
+
+    if has_terminal?('\G[\\s]', true, index)
+      r0 = instantiate_node(SyntaxNode,input, index...(index + 1))
+      @index += 1
+    else
+      r0 = nil
+    end
+
+    node_cache[:whitespace][start_index] = r0
 
     r0
   end

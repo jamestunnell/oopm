@@ -1,17 +1,16 @@
 grammar Expression
-  include Whitespace
   include AnyObject
   
   rule expression
-    ((grouped_expression / any_object) (method_call / (whitespace binary_operation))?)
+    ((grouped_expression / any_object) action:(method_call / (whitespace* binary_operation))*)
   end
 
   rule grouped_expression
-    ("(" whitespace expression whitespace ")")
+    ("(" whitespace* expression whitespace* ")")
   end
 
   rule binary_operation
-    (binary_operator whitespace expression)
+    (binary_operator whitespace* expression)
   end
 
   rule binary_operator
@@ -19,10 +18,14 @@ grammar Expression
   end
   
   rule method_call
-    ("." name ("(" whitespace method_args? whitespace ")")?)
+    ("." method_name:name ("(" whitespace* method_args:method_args? whitespace* ")")?)
   end
   
   rule method_args
-    (expression whitespace ("," whitespace expression whitespace)*)
+    (expression whitespace* args:("," whitespace* expression whitespace*)*)
+  end
+
+  rule whitespace
+    [\s]
   end
 end

@@ -1,5 +1,0 @@
-grammar Whitespace
-  rule whitespace
-    [\s]*
-  end
-end
