@@ -32,18 +32,55 @@ task :doc => :yard
 
 require "bundler/gem_tasks"
 
+#
+# Generate Parsers
+#
+
 task :make_parsers do
   parsing_path_rel = 'lib/oopm/parsing'
   project_root = Dir.getwd
   
   Dir.chdir parsing_path_rel
-  grammars = Dir.glob('*.treetop')
+  #grammars = Dir.glob('*.treetop')
+  grammars = ['number.treetop','name.treetop','string_literal.treetop','any_object.treetop','expression.treetop']
   
-  puts "Making parsers from .treetop files in #{project_root}/#{parsing_path_rel}"
+  puts "Making parsers from grammar files:"
   grammars.each do |grammar|
     puts "making parser from #{grammar}"
     `tt #{grammar}`
   end
   
   Dir.chdir project_root
+end
+
+#
+# Gem Build/Install
+#
+
+require 'rubygems/package_task'
+
+spec = Gem::Specification.load(Dir['*.gemspec'].first)
+gem = Gem::PackageTask.new(spec)
+
+desc "build the gem file"
+task :build => :make_parsers do
+  gem.define
+end
+
+def is_installed? gem_name
+  !(`gem list --local`.scan(gem_name).empty?)
+end
+
+desc "install gem locally"
+task :install_local => :build do
+  #only uninstall if found
+  if is_installed? spec.name
+    print 'Found gem, uninstalling...'
+    `sudo gem uninstall #{gem.gem_spec.name}`
+    puts 'done.'
+  end
+
+  print 'Installing gem...'
+  `sudo gem install #{gem.package_dir_path}`
+  puts 'done.'
 end
