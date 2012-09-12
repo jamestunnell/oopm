@@ -2,30 +2,44 @@ grammar Expression
   include AnyObject
   
   rule expression
-    ((grouped_expression / any_object) action:(method_call / (whitespace* binary_operation))*)
-  end
-
-  rule grouped_expression
-    ("(" whitespace* expression whitespace* ")")
+    binary_operation / method_call / grouped_expression / any_object
   end
 
   rule binary_operation
-    (binary_operator whitespace* expression)
+    left_operand:(method_call / grouped_expression / any_object)
+    operation_chain:(
+      whitespace*
+      operator:binary_operator
+      whitespace*
+      right_operand:(method_call / grouped_expression / any_object)
+    )+
   end
 
   rule binary_operator
-    ("+" / "-" / "*" / "/" / "%" / "||" / "&&" / "==" / "=" / "|" / "&" / "<<")
+    "+" / "-" / "*" / "/" / "%" / "||" / "&&" / "==" / "=" / "|" / "&" / "<<"
   end
   
   rule method_call
-    ("." method_name:name ("(" whitespace* method_args:method_args? whitespace* ")")?)
+    method_reciever:(grouped_expression / any_object)
+    call_chain:("." method_name:name method_args:(
+        ("(" whitespace* args whitespace* ")") /
+        ( "(" whitespace* ")" ) /
+        ( whitespace* args whitespace* ) /
+        ""
+      )
+    )+
   end
   
-  rule method_args
-    (expression whitespace* args:("," whitespace* expression whitespace*)*)
+  rule args
+    first_arg:expression whitespace* more_args:("," whitespace* another_arg:expression whitespace*)*
   end
 
+  rule grouped_expression
+    "(" whitespace* expression whitespace* ")"
+  end
+  
   rule whitespace
     [\s]
   end
+  
 end
