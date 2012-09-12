@@ -1,9 +1,25 @@
 grammar AnyObject
-  include StringLiteral
-  include Number
-  include Name
-  
   rule any_object
-    (string_literal / number / name)
+    (string_literal / number / name) <AnyObjectNode>
+  end
+
+  rule string_literal
+    (double_quoted / single_quoted )
+  end
+
+  rule single_quoted
+    ('\'' (('\\\'') / (!'\'' .))* '\'')
+  end
+  
+  rule double_quoted
+    ('"' (('\"') / (!'"' .))* '"')
+  end
+
+  rule number
+    ([\d]* "."? [\d]+) / ([\d]+)
+  end
+
+  rule name
+    ([_a-zA-z] [_a-zA-z0-9]*)
   end
 end

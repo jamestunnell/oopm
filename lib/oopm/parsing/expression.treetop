@@ -13,6 +13,7 @@ grammar Expression
       whitespace*
       right_operand:(method_call / grouped_expression / any_object)
     )+
+    <BinaryOperationNode>
   end
 
   rule binary_operator
@@ -21,13 +22,17 @@ grammar Expression
   
   rule method_call
     method_reciever:(grouped_expression / any_object)
-    call_chain:("." method_name:name method_args:(
+    call_chain:(
+      "."
+      method_name:name
+      method_args:(
         ("(" whitespace* args whitespace* ")") /
         ( "(" whitespace* ")" ) /
         ( whitespace* args whitespace* ) /
         ""
       )
     )+
+    <MethodCallNode>
   end
   
   rule args
@@ -35,7 +40,7 @@ grammar Expression
   end
 
   rule grouped_expression
-    "(" whitespace* expression whitespace* ")"
+    "(" whitespace* expression whitespace* ")" <GroupedExpressionNode>
   end
   
   rule whitespace

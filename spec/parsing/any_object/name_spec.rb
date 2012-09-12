@@ -1,8 +1,9 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe NameParser do
+describe AnyObjectParser do
   before(:each) do
-    @parser = NameParser.new
+    @parser = AnyObjectParser.new
+    @parser.root = :name
   end
   
   describe "parses strings starting with a letter or underscore and followed by valid characters thereafter" do

@@ -1,8 +1,9 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe StringLiteralParser do
+describe AnyObjectParser do
   before(:each) do
-    @parser = StringLiteralParser.new
+    @parser = AnyObjectParser.new
+    @parser.root = :string_literal
     @messages = ["hello world", "What a wonderful world!!!"]
   end
   

@@ -176,7 +176,7 @@ module Expression
       s0 << r5
     end
     if s0.last
-      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0 = instantiate_node(BinaryOperationNode,input, i0...index, s0)
       r0.extend(BinaryOperation1)
     else
       @index = i0
@@ -601,7 +601,7 @@ module Expression
       s0 << r4
     end
     if s0.last
-      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0 = instantiate_node(MethodCallNode,input, i0...index, s0)
       r0.extend(MethodCall4)
     else
       @index = i0
@@ -796,7 +796,7 @@ module Expression
       end
     end
     if s0.last
-      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0 = instantiate_node(GroupedExpressionNode,input, i0...index, s0)
       r0.extend(GroupedExpression0)
     else
       @index = i0
