@@ -1,7 +1,7 @@
 module OOPM
 module Assembly
   
-class AssemblyStatement
+class AssemblyInstruction
   
   INSTRUCTION_LITERAL = :Literal
   INSTRUCTION_SEND_MSG = :SendMsg

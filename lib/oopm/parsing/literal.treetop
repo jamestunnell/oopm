@@ -1,12 +1,16 @@
 module OOPM
 module Parsing
 
-grammar AnyObject
-  rule any_object
-    (string_literal / number / name) <AnyObjectNode>
+grammar Literal
+  rule literal
+    (symbol / string / number / name) <LiteralNode>
   end
 
-  rule string_literal
+  rule symbol
+    ":" (('\'' [_a-zA-Z0-9]+ '\'') / ('"' [_a-zA-Z0-9]+ '"') / name)
+  end
+
+  rule string
     (double_quoted / single_quoted )
   end
 
@@ -21,9 +25,9 @@ grammar AnyObject
   rule number
     ([\d]* "."? [\d]+) / ([\d]+)
   end
-
+  
   rule name
-    ([_a-zA-z] [_a-zA-z0-9]*)
+    ([_a-zA-Z] [_a-zA-Z0-9]*)
   end
 end
 

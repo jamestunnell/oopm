@@ -4,17 +4,17 @@
 module OOPM
 module Parsing
 
-module AnyObject
+module Literal
   include Treetop::Runtime
 
   def root
-    @root ||= :any_object
+    @root ||= :literal
   end
 
-  def _nt_any_object
+  def _nt_literal
     start_index = index
-    if node_cache[:any_object].has_key?(index)
-      cached = node_cache[:any_object][index]
+    if node_cache[:literal].has_key?(index)
+      cached = node_cache[:literal][index]
       if cached
         cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
@@ -23,36 +23,201 @@ module AnyObject
     end
 
     i0 = index
-    r1 = _nt_string_literal
+    r1 = _nt_symbol
     if r1
       r0 = r1
-      r0.extend(AnyObjectNode)
+      r0.extend(LiteralNode)
     else
-      r2 = _nt_number
+      r2 = _nt_string
       if r2
         r0 = r2
-        r0.extend(AnyObjectNode)
+        r0.extend(LiteralNode)
       else
-        r3 = _nt_name
+        r3 = _nt_number
         if r3
           r0 = r3
-          r0.extend(AnyObjectNode)
+          r0.extend(LiteralNode)
         else
-          @index = i0
-          r0 = nil
+          r4 = _nt_name
+          if r4
+            r0 = r4
+            r0.extend(LiteralNode)
+          else
+            @index = i0
+            r0 = nil
+          end
         end
       end
     end
 
-    node_cache[:any_object][start_index] = r0
+    node_cache[:literal][start_index] = r0
 
     r0
   end
 
-  def _nt_string_literal
+  module Symbol0
+  end
+
+  module Symbol1
+  end
+
+  module Symbol2
+  end
+
+  def _nt_symbol
     start_index = index
-    if node_cache[:string_literal].has_key?(index)
-      cached = node_cache[:string_literal][index]
+    if node_cache[:symbol].has_key?(index)
+      cached = node_cache[:symbol][index]
+      if cached
+        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        @index = cached.interval.end
+      end
+      return cached
+    end
+
+    i0, s0 = index, []
+    if has_terminal?(":", false, index)
+      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
+      @index += 1
+    else
+      terminal_parse_failure(":")
+      r1 = nil
+    end
+    s0 << r1
+    if r1
+      i2 = index
+      i3, s3 = index, []
+      if has_terminal?('\'', false, index)
+        r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        @index += 1
+      else
+        terminal_parse_failure('\'')
+        r4 = nil
+      end
+      s3 << r4
+      if r4
+        s5, i5 = [], index
+        loop do
+          if has_terminal?('\G[_a-zA-Z0-9]', true, index)
+            r6 = true
+            @index += 1
+          else
+            r6 = nil
+          end
+          if r6
+            s5 << r6
+          else
+            break
+          end
+        end
+        if s5.empty?
+          @index = i5
+          r5 = nil
+        else
+          r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
+        end
+        s3 << r5
+        if r5
+          if has_terminal?('\'', false, index)
+            r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
+            @index += 1
+          else
+            terminal_parse_failure('\'')
+            r7 = nil
+          end
+          s3 << r7
+        end
+      end
+      if s3.last
+        r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
+        r3.extend(Symbol0)
+      else
+        @index = i3
+        r3 = nil
+      end
+      if r3
+        r2 = r3
+      else
+        i8, s8 = index, []
+        if has_terminal?('"', false, index)
+          r9 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          @index += 1
+        else
+          terminal_parse_failure('"')
+          r9 = nil
+        end
+        s8 << r9
+        if r9
+          s10, i10 = [], index
+          loop do
+            if has_terminal?('\G[_a-zA-Z0-9]', true, index)
+              r11 = true
+              @index += 1
+            else
+              r11 = nil
+            end
+            if r11
+              s10 << r11
+            else
+              break
+            end
+          end
+          if s10.empty?
+            @index = i10
+            r10 = nil
+          else
+            r10 = instantiate_node(SyntaxNode,input, i10...index, s10)
+          end
+          s8 << r10
+          if r10
+            if has_terminal?('"', false, index)
+              r12 = instantiate_node(SyntaxNode,input, index...(index + 1))
+              @index += 1
+            else
+              terminal_parse_failure('"')
+              r12 = nil
+            end
+            s8 << r12
+          end
+        end
+        if s8.last
+          r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
+          r8.extend(Symbol1)
+        else
+          @index = i8
+          r8 = nil
+        end
+        if r8
+          r2 = r8
+        else
+          r13 = _nt_name
+          if r13
+            r2 = r13
+          else
+            @index = i2
+            r2 = nil
+          end
+        end
+      end
+      s0 << r2
+    end
+    if s0.last
+      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0.extend(Symbol2)
+    else
+      @index = i0
+      r0 = nil
+    end
+
+    node_cache[:symbol][start_index] = r0
+
+    r0
+  end
+
+  def _nt_string
+    start_index = index
+    if node_cache[:string].has_key?(index)
+      cached = node_cache[:string][index]
       if cached
         cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
         @index = cached.interval.end
@@ -74,7 +239,7 @@ module AnyObject
       end
     end
 
-    node_cache[:string_literal][start_index] = r0
+    node_cache[:string][start_index] = r0
 
     r0
   end
@@ -431,7 +596,7 @@ module AnyObject
     end
 
     i0, s0 = index, []
-    if has_terminal?('\G[_a-zA-z]', true, index)
+    if has_terminal?('\G[_a-zA-Z]', true, index)
       r1 = true
       @index += 1
     else
@@ -441,7 +606,7 @@ module AnyObject
     if r1
       s2, i2 = [], index
       loop do
-        if has_terminal?('\G[_a-zA-z0-9]', true, index)
+        if has_terminal?('\G[_a-zA-Z0-9]', true, index)
           r3 = true
           @index += 1
         else
@@ -471,8 +636,8 @@ module AnyObject
 
 end
 
-class AnyObjectParser < Treetop::Runtime::CompiledParser
-  include AnyObject
+class LiteralParser < Treetop::Runtime::CompiledParser
+  include Literal
 end
 
 

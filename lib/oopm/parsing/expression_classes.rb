@@ -12,7 +12,11 @@ class BinaryOperationNode < Treetop::Runtime::SyntaxNode
     for i in 0...operation_chain.elements.length
       
       reciever = assembly_statements.last.statement_id
-      method = operation_chain.elements[i].operator.text_value
+      
+      method = operation_chain.elements[i].operator.text_value.to_sym
+      assembly_statements << Assembly::Literal.new(method)
+      method = assembly_statements.last.statement_id
+      
       right_operand = operation_chain.elements[i].right_operand
       
       assign = (i == (operation_chain.elements.length - 1)) ? assign_result_to : ""
@@ -27,21 +31,24 @@ class BinaryOperationNode < Treetop::Runtime::SyntaxNode
   
   def binary_operation?; true; end;
   def method_call?; false; end;
-  def any_object?; false; end;
+  def literal?; false; end;
 end
 
 class MethodCallNode < Treetop::Runtime::SyntaxNode
   def to_assembly assign_result_to = ""
-    raise NotImplementedError
     
     assembly_statements = method_reciever.to_assembly
     
     for i in 0...call_chain.elements.length
       
       reciever = assembly_statements.last.statement_id
-      method = call_chain.elements[i].method_name.text_value
+      
+      method = call_chain.elements[i].method_name.text_value.to_sym
+      assembly_statements << Assembly::Literal.new(method)
+      method = assembly_statements.last.statement_id
+      
       assign = (i == (call_chain.elements.length - 1)) ? assign_result_to : ""
-    
+          
       method_args = call_chain.elements[i].method_args
       arg_nodes = []
       if method_args.respond_to? :args
@@ -68,7 +75,7 @@ class MethodCallNode < Treetop::Runtime::SyntaxNode
 
   def binary_operation?; false; end;
   def method_call?; true; end;
-  def any_object?; false; end;      
+  def literal?; false; end;      
 end
 
 class GroupedExpressionNode < Treetop::Runtime::SyntaxNode
@@ -84,8 +91,8 @@ class GroupedExpressionNode < Treetop::Runtime::SyntaxNode
     return expression.method_call?
   end
   
-  def any_object?
-    return expression.any_object?
+  def literal?
+    return expression.literal?
   end
 end
 

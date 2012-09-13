@@ -2,19 +2,19 @@ module OOPM
 module Parsing
 
 grammar Expression
-  include AnyObject
+  include Literal
   
   rule expression
-    binary_operation / method_call / grouped_expression / any_object
+    binary_operation / method_call / grouped_expression / literal
   end
 
   rule binary_operation
-    left_operand:(method_call / grouped_expression / any_object)
+    left_operand:(method_call / grouped_expression / literal)
     operation_chain:(
       whitespace*
       operator:binary_operator
       whitespace*
-      right_operand:(method_call / grouped_expression / any_object)
+      right_operand:(method_call / grouped_expression / literal)
     )+
     <BinaryOperationNode>
   end
@@ -24,10 +24,10 @@ grammar Expression
   end
   
   rule method_call
-    method_reciever:(grouped_expression / any_object)
+    method_reciever:(grouped_expression / literal)
     call_chain:(
       "."
-      method_name:name
+      method_name
       method_args:(
         ("(" whitespace* args whitespace* ")") /
         ( "(" whitespace* ")" ) /
@@ -36,6 +36,10 @@ grammar Expression
       )
     )+
     <MethodCallNode>
+  end
+  
+  rule method_name
+    "[]" / ([+\-*/=&|%] "="?) / (name [!?=]?)
   end
   
   rule args

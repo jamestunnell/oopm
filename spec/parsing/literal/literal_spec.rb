@@ -1,8 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe OOPM::Parsing::AnyObjectParser do
+describe OOPM::Parsing::LiteralParser do
   before(:each) do
-    @parser = OOPM::Parsing::AnyObjectParser.new
+    @parser = OOPM::Parsing::LiteralParser.new
   end
   
   it "should parse valid numbers" do

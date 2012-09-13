@@ -11,7 +11,7 @@ module Expression
     @root ||= :expression
   end
 
-  include AnyObject
+  include Literal
 
   def _nt_expression
     start_index = index
@@ -37,7 +37,7 @@ module Expression
         if r3
           r0 = r3
         else
-          r4 = _nt_any_object
+          r4 = _nt_literal
           if r4
             r0 = r4
           else
@@ -94,7 +94,7 @@ module Expression
       if r3
         r1 = r3
       else
-        r4 = _nt_any_object
+        r4 = _nt_literal
         if r4
           r1 = r4
         else
@@ -144,7 +144,7 @@ module Expression
                 if r14
                   r12 = r14
                 else
-                  r15 = _nt_any_object
+                  r15 = _nt_literal
                   if r15
                     r12 = r15
                   else
@@ -397,7 +397,7 @@ module Expression
     if r2
       r1 = r2
     else
-      r3 = _nt_any_object
+      r3 = _nt_literal
       if r3
         r1 = r3
       else
@@ -419,7 +419,7 @@ module Expression
         end
         s5 << r6
         if r6
-          r7 = _nt_name
+          r7 = _nt_method_name
           s5 << r7
           if r7
             i8 = index
@@ -612,6 +612,128 @@ module Expression
     end
 
     node_cache[:method_call][start_index] = r0
+
+    r0
+  end
+
+  module MethodName0
+  end
+
+  module MethodName1
+    def name
+      elements[0]
+    end
+
+  end
+
+  def _nt_method_name
+    start_index = index
+    if node_cache[:method_name].has_key?(index)
+      cached = node_cache[:method_name][index]
+      if cached
+        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        @index = cached.interval.end
+      end
+      return cached
+    end
+
+    i0 = index
+    if has_terminal?("[]", false, index)
+      r1 = instantiate_node(SyntaxNode,input, index...(index + 2))
+      @index += 2
+    else
+      terminal_parse_failure("[]")
+      r1 = nil
+    end
+    if r1
+      r0 = r1
+    else
+      i2, s2 = index, []
+      if has_terminal?('\G[+\\-*/=&|%]', true, index)
+        r3 = true
+        @index += 1
+      else
+        r3 = nil
+      end
+      s2 << r3
+      if r3
+        if has_terminal?("=", false, index)
+          r5 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          @index += 1
+        else
+          terminal_parse_failure("=")
+          r5 = nil
+        end
+        if r5
+          r4 = r5
+        else
+          r4 = instantiate_node(SyntaxNode,input, index...index)
+        end
+        s2 << r4
+      end
+      if s2.last
+        r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
+        r2.extend(MethodName0)
+      else
+        @index = i2
+        r2 = nil
+      end
+      if r2
+        r0 = r2
+      else
+        i6, s6 = index, []
+        r7 = _nt_name
+        s6 << r7
+        if r7
+          i9 = index
+          if has_terminal?("!", false, index)
+            r10 = instantiate_node(SyntaxNode,input, index...(index + 1))
+            @index += 1
+          else
+            terminal_parse_failure("!")
+            r10 = nil
+          end
+          if r10
+            r9 = r10
+          else
+            if has_terminal?("?", false, index)
+              r11 = instantiate_node(SyntaxNode,input, index...(index + 1))
+              @index += 1
+            else
+              terminal_parse_failure("?")
+              r11 = nil
+            end
+            if r11
+              r9 = r11
+            else
+              @index = i9
+              r9 = nil
+            end
+          end
+          if r9
+            r8 = r9
+          else
+            r8 = instantiate_node(SyntaxNode,input, index...index)
+          end
+          s6 << r8
+        end
+        if s6.last
+          r6 = instantiate_node(SyntaxNode,input, i6...index, s6)
+          r6.extend(MethodName1)
+        else
+          @index = i6
+          r6 = nil
+        end
+        if r6
+          r0 = r6
+        else
+          @index = i0
+          r0 = nil
+        end
+      end
+    end
+
+    node_cache[:method_name][start_index] = r0
 
     r0
   end
