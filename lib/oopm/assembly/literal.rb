@@ -1,16 +1,14 @@
 module OOPM
 module Assembly
   
-class SendMsg < AssemblyStatement
+class Literal < AssemblyStatement
   
-  attr_reader :reciever, :method, :args
+  attr_reader :value
   
-  def initialize reciever, method, args, statement_id=""
-    @reciever = reciever
-    @method = method
-    @args = args
+  def initialize value, statement_id=""
+    @value = value
     
-    super INSTRUCTION_SEND_MSG, [reciever, method] + args, statement_id
+    super INSTRUCTION_LITERAL, [@value], statement_id
   end
   
   #def to_s

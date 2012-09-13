@@ -1,33 +1,25 @@
+module OOPM
+module Parsing
+
 require 'treetop'
 
 class BinaryOperationNode < Treetop::Runtime::SyntaxNode
   
-  def to_assembly assign_result_to = ""
+  def to_assembly assign_result_to=""
   
-    assembly_statements = []
-    reciever = left_operand.text_value
-    
-    if !left_operand.any_object?
-      reciever = UniqueName.new_name
-      assembly_statements << left_operand.to_assembly(reciever)
-    end
+    assembly_statements = left_operand.to_assembly
     
     for i in 0...operation_chain.elements.length
       
+      reciever = assembly_statements.last.statement_id
       method = operation_chain.elements[i].operator.text_value
       right_operand = operation_chain.elements[i].right_operand
       
-      assign = (i == (operation_chain.elements.length - 1)) ? assign_result_to : UniqueName.new_name
+      assign = (i == (operation_chain.elements.length - 1)) ? assign_result_to : ""
       
-      if right_operand.any_object?
-        assembly_statements << Assembly::SendMsg.new(assign, reciever, method, [right_operand.text_value])
-      else
-        name = UniqueName.new_name
-        assembly_statements << right_operand.to_assembly(name)
-        assembly_statements << Assembly::SendMsg.new(assign, reciever, method, [name])
-      end
+      assembly_statements += right_operand.to_assembly
+      assembly_statements << Assembly::SendMsg.new(reciever, method, [assembly_statements.last.statement_id], assign)
       
-      reciever = assign
     end
     
     return assembly_statements
@@ -40,19 +32,16 @@ end
 
 class MethodCallNode < Treetop::Runtime::SyntaxNode
   def to_assembly assign_result_to = ""
-    assembly_statements = []
-    reciever = method_reciever.text_value
+    raise NotImplementedError
     
-    if !method_reciever.any_object?
-      reciever = UniqueName.new_name
-      assembly_statements << method_reciever.to_assembly(reciever)
-    end
+    assembly_statements = method_reciever.to_assembly
     
     for i in 0...call_chain.elements.length
       
+      reciever = assembly_statements.last.statement_id
       method = call_chain.elements[i].method_name.text_value
-      assign = (i == (call_chain.elements.length - 1)) ? assign_result_to : UniqueName.new_name
-
+      assign = (i == (call_chain.elements.length - 1)) ? assign_result_to : ""
+    
       method_args = call_chain.elements[i].method_args
       arg_nodes = []
       if method_args.respond_to? :args
@@ -67,18 +56,11 @@ class MethodCallNode < Treetop::Runtime::SyntaxNode
       
       arg_strings = []
       arg_nodes.each do |arg|
-        if !arg.any_object?
-          arg_string << UniqueName.new_name
-          assembly_statements << arg.to_assembly(arg_string)
-          arg_strings << arg_string
-        else
-          arg_strings << arg.text_value
-        end
+        assembly_statements += arg.to_assembly
+        arg_strings << assembly_statements.last.statement_id
       end
       
-      assembly_statements << Assembly::SendMsg.new(assign, reciever, method, arg_strings)
-      
-      reciever = assign
+      assembly_statements << Assembly::SendMsg.new(reciever, method, arg_strings, assign)
     end
     
     return assembly_statements
@@ -105,4 +87,7 @@ class GroupedExpressionNode < Treetop::Runtime::SyntaxNode
   def any_object?
     return expression.any_object?
   end
+end
+
+end
 end

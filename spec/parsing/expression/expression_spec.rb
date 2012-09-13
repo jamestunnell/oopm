@@ -1,14 +1,13 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe ExpressionParser do
+describe OOPM::Parsing::ExpressionParser do
   
   binary_operators = ["+", "-", "*", "/", "%", "||", "&&", "==", "=", "|", "&", "<<"]
   object_strings = [ '1', 'hello', "\"hello\""]
   expression_strings = ["my_obj", "1", '"hello world"', "1.times", "no.way()", "(1+2)", "(5 / 5)"]
-  parser = ExpressionParser.new
 
   before(:each) do
-    @parser = ExpressionParser.new
+    @parser = OOPM::Parsing::ExpressionParser.new
     @object_strings = [ '1', 'hello', "\"hello\""]
   end
 

@@ -1,8 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe AnyObjectParser do
+describe OOPM::Parsing::AnyObjectParser do
   before(:each) do
-    @parser = AnyObjectParser.new
+    @parser = OOPM::Parsing::AnyObjectParser.new
     @parser.root = :string_literal
     @messages = ["hello world", "What a wonderful world!!!"]
   end

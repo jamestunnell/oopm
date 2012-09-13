@@ -42,7 +42,7 @@ task :make_parsers do
   
   Dir.chdir parsing_path_rel
   #grammars = Dir.glob('*.treetop')
-  grammars = ['number.treetop','name.treetop','string_literal.treetop','any_object.treetop','expression.treetop']
+  grammars = ['any_object.treetop','expression.treetop']
   
   puts "Making parsers from grammar files:"
   grammars.each do |grammar|
