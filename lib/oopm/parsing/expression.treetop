@@ -3,31 +3,44 @@ module Parsing
 
 grammar Expression
   include Literal
-  
+
   rule expression
-    binary_operation / method_call / grouped_expression / literal
+    assignment / binary_operation / method_call / grouped_expression / literal
+  end
+
+  rule assignment
+    name whitespace* "=" whitespace* expression <AssignmentNode>
   end
 
   rule binary_operation
-    left_operand:(method_call / grouped_expression / literal)
+    left_operand:(assignment / method_call / grouped_expression / literal)
     operation_chain:(
       whitespace*
       operator:binary_operator
       whitespace*
-      right_operand:(method_call / grouped_expression / literal)
+      right_operand:(assignment / method_call / grouped_expression / literal)
     )+
     <BinaryOperationNode>
   end
 
   rule binary_operator
-    "+" / "-" / "*" / "/" / "%" / "||" / "&&" / "==" / "=" / "|" / "&" / "<<"
+    ("|" [|=]?) /
+    ("&" [&=]?) /
+    "==" /
+     "<<" /
+     ("+" "="?) /
+     ("-" "="?) /
+     ("*" [*=]?) /
+     ("/" [/=]?) /
+     ("%" "="?)
   end
-  
+
   rule method_call
     method_reciever:(grouped_expression / literal)
     call_chain:(
       "."
       method_name
+      suffix:([!?] / (whitespace* "=" whitespace*))?
       method_args:(
         ("(" whitespace* args whitespace* ")") /
         ( "(" whitespace* ")" ) /
@@ -37,11 +50,11 @@ grammar Expression
     )+
     <MethodCallNode>
   end
-  
+
   rule method_name
-    "[]" / ([+\-*/=&|%] "="?) / (name [!?=]?)
+    "[]" / binary_operator / name
   end
-  
+
   rule args
     first_arg:expression whitespace* more_args:("," whitespace* another_arg:expression whitespace*)*
   end
@@ -49,7 +62,7 @@ grammar Expression
   rule grouped_expression
     "(" whitespace* expression whitespace* ")" <GroupedExpressionNode>
   end
-  
+
   rule whitespace
     [\s]
   end
