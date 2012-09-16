@@ -2,6 +2,8 @@ module OOPM
 module Parsing
 
 grammar Literal
+  include Keyword
+
   rule literal
     (symbol / string / number / name) <LiteralNode>
   end
@@ -17,7 +19,7 @@ grammar Literal
   rule single_quoted
     ('\'' (('\\\'') / (!'\'' .))* '\'')
   end
-  
+
   rule double_quoted
     ('"' (('\"') / (!'"' .))* '"')
   end
@@ -25,9 +27,9 @@ grammar Literal
   rule number
     ([\d]* "."? [\d]+) / ([\d]+)
   end
-  
+
   rule name
-    ([_a-zA-Z] [_a-zA-Z0-9]*)
+    !(keyword ![_a-zA-Z0-9]) [_a-zA-Z] [_a-zA-Z0-9]*
   end
 end
 

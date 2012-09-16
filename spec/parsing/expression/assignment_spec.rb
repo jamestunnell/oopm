@@ -42,7 +42,7 @@ describe OOPM::Parsing::ExpressionParser do
   
   it "should parse nested assignments (assignment within an expression on the right-hand side)" do
     @parser.parse("x = 5 + y = 2").should be_true
-    @parser.parse("x = do.this(a = b)").should be_true
+    @parser.parse("x = please_do.this(a = b)").should be_true
     @parser.parse("x = no.way 4 + a = 1").should be_true
   end
 end

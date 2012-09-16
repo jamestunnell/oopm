@@ -1,0 +1,12 @@
+module OOPM
+module Parsing
+
+grammar Keyword
+  rule keyword
+    "ifels" / "if" / "end" / "def" / "class" / "module" / "then" /
+    "unless" / "raise" / "return" / "do" / "else" / "require" / "include"
+  end
+end
+
+end
+end

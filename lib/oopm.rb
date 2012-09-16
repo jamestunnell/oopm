@@ -5,6 +5,7 @@ require 'oopm/assembly/literal'
 require 'oopm/assembly/send_msg'
 
 require 'treetop'
+require 'oopm/parsing/keyword'
 require 'oopm/parsing/literal'
 require 'oopm/parsing/literal_class'
 require 'oopm/parsing/expression'
