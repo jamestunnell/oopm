@@ -5,8 +5,8 @@ describe OOPM::Assembly::Literal do
     a = OOPM::Assembly::Literal.new "baby"
     a.value.should eq("baby")
 
-    a = OOPM::Assembly::Literal.new [1,2,3]
-    a.value.should eq([1,2,3])
+    a = OOPM::Assembly::Literal.new 2
+    a.value.should eq(2)
   end
 
   it "should have operands that contain only the value" do
@@ -14,8 +14,8 @@ describe OOPM::Assembly::Literal do
     a.operands.length.should be 1
     a.operands[0].should eq("baby")
 
-    a = OOPM::Assembly::Literal.new [1,2,3]
+    a = OOPM::Assembly::Literal.new 2
     a.operands.length.should be 1
-    a.operands[0].should eq([1,2,3])
+    a.operands[0].should eq(2)
   end
 end

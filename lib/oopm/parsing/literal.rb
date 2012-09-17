@@ -11,8 +11,6 @@ module Literal
     @root ||= :literal
   end
 
-  include Keyword
-
   def _nt_literal
     start_index = index
     if node_cache[:literal].has_key?(index)
@@ -40,14 +38,8 @@ module Literal
           r0 = r3
           r0.extend(LiteralNode)
         else
-          r4 = _nt_name
-          if r4
-            r0 = r4
-            r0.extend(LiteralNode)
-          else
-            @index = i0
-            r0 = nil
-          end
+          @index = i0
+          r0 = nil
         end
       end
     end
@@ -61,9 +53,6 @@ module Literal
   end
 
   module Symbol1
-  end
-
-  module Symbol2
   end
 
   def _nt_symbol
@@ -88,124 +77,55 @@ module Literal
     s0 << r1
     if r1
       i2 = index
-      i3, s3 = index, []
-      if has_terminal?('\'', false, index)
-        r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
-        @index += 1
-      else
-        terminal_parse_failure('\'')
-        r4 = nil
-      end
-      s3 << r4
-      if r4
-        s5, i5 = [], index
-        loop do
-          if has_terminal?('\G[_a-zA-Z0-9]', true, index)
-            r6 = true
-            @index += 1
-          else
-            r6 = nil
-          end
-          if r6
-            s5 << r6
-          else
-            break
-          end
-        end
-        if s5.empty?
-          @index = i5
-          r5 = nil
-        else
-          r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
-        end
-        s3 << r5
-        if r5
-          if has_terminal?('\'', false, index)
-            r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
-            @index += 1
-          else
-            terminal_parse_failure('\'')
-            r7 = nil
-          end
-          s3 << r7
-        end
-      end
-      if s3.last
-        r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
-        r3.extend(Symbol0)
-      else
-        @index = i3
-        r3 = nil
-      end
+      r3 = _nt_string
       if r3
         r2 = r3
       else
-        i8, s8 = index, []
-        if has_terminal?('"', false, index)
-          r9 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        i4, s4 = index, []
+        if has_terminal?('\G[_a-zA-Z]', true, index)
+          r5 = true
           @index += 1
         else
-          terminal_parse_failure('"')
-          r9 = nil
+          r5 = nil
         end
-        s8 << r9
-        if r9
-          s10, i10 = [], index
+        s4 << r5
+        if r5
+          s6, i6 = [], index
           loop do
             if has_terminal?('\G[_a-zA-Z0-9]', true, index)
-              r11 = true
+              r7 = true
               @index += 1
             else
-              r11 = nil
+              r7 = nil
             end
-            if r11
-              s10 << r11
+            if r7
+              s6 << r7
             else
               break
             end
           end
-          if s10.empty?
-            @index = i10
-            r10 = nil
-          else
-            r10 = instantiate_node(SyntaxNode,input, i10...index, s10)
-          end
-          s8 << r10
-          if r10
-            if has_terminal?('"', false, index)
-              r12 = instantiate_node(SyntaxNode,input, index...(index + 1))
-              @index += 1
-            else
-              terminal_parse_failure('"')
-              r12 = nil
-            end
-            s8 << r12
-          end
+          r6 = instantiate_node(SyntaxNode,input, i6...index, s6)
+          s4 << r6
         end
-        if s8.last
-          r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
-          r8.extend(Symbol1)
+        if s4.last
+          r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
+          r4.extend(Symbol0)
         else
-          @index = i8
-          r8 = nil
+          @index = i4
+          r4 = nil
         end
-        if r8
-          r2 = r8
+        if r4
+          r2 = r4
         else
-          r13 = _nt_name
-          if r13
-            r2 = r13
-          else
-            @index = i2
-            r2 = nil
-          end
+          @index = i2
+          r2 = nil
         end
       end
       s0 << r2
     end
     if s0.last
       r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
-      r0.extend(Symbol2)
+      r0.extend(Symbol1)
     else
       @index = i0
       r0 = nil
@@ -579,102 +499,6 @@ module Literal
     end
 
     node_cache[:number][start_index] = r0
-
-    r0
-  end
-
-  module Name0
-    def keyword
-      elements[0]
-    end
-
-  end
-
-  module Name1
-  end
-
-  def _nt_name
-    start_index = index
-    if node_cache[:name].has_key?(index)
-      cached = node_cache[:name][index]
-      if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
-        @index = cached.interval.end
-      end
-      return cached
-    end
-
-    i0, s0 = index, []
-    i1 = index
-    i2, s2 = index, []
-    r3 = _nt_keyword
-    s2 << r3
-    if r3
-      i4 = index
-      if has_terminal?('\G[_a-zA-Z0-9]', true, index)
-        r5 = true
-        @index += 1
-      else
-        r5 = nil
-      end
-      if r5
-        r4 = nil
-      else
-        @index = i4
-        r4 = instantiate_node(SyntaxNode,input, index...index)
-      end
-      s2 << r4
-    end
-    if s2.last
-      r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
-      r2.extend(Name0)
-    else
-      @index = i2
-      r2 = nil
-    end
-    if r2
-      r1 = nil
-    else
-      @index = i1
-      r1 = instantiate_node(SyntaxNode,input, index...index)
-    end
-    s0 << r1
-    if r1
-      if has_terminal?('\G[_a-zA-Z]', true, index)
-        r6 = true
-        @index += 1
-      else
-        r6 = nil
-      end
-      s0 << r6
-      if r6
-        s7, i7 = [], index
-        loop do
-          if has_terminal?('\G[_a-zA-Z0-9]', true, index)
-            r8 = true
-            @index += 1
-          else
-            r8 = nil
-          end
-          if r8
-            s7 << r8
-          else
-            break
-          end
-        end
-        r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
-        s0 << r7
-      end
-    end
-    if s0.last
-      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
-      r0.extend(Name1)
-    else
-      @index = i0
-      r0 = nil
-    end
-
-    node_cache[:name][start_index] = r0
 
     r0
   end

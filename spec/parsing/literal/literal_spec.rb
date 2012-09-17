@@ -11,10 +11,12 @@ describe OOPM::Parsing::LiteralParser do
     @parser.parse('.7890').should be_true
   end
 
-  it "should parse valid names" do
-    @parser.parse('abc123').should be_true
-    @parser.parse('abc_123').should be_true
-    @parser.parse('_abc123').should be_true
+  it "should parse valid symbols" do
+    @parser.parse(':abc123').should be_true
+    @parser.parse(':abc_123').should be_true
+    @parser.parse(':_abc123').should be_true
+    @parser.parse(':"123"').should be_true
+    @parser.parse(':"+"').should be_true
   end
 
   it "should parse valid string literals" do

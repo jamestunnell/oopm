@@ -1,0 +1,13 @@
+module OOPM
+module Parsing
+
+grammar Reference
+  include Keyword
+
+  rule reference
+    !(keyword ![_a-zA-Z0-9]) [_a-zA-Z] [_a-zA-Z0-9]* <ReferenceNode>
+  end
+end
+
+end
+end

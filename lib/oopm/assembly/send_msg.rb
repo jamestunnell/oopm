@@ -1,11 +1,11 @@
 module OOPM
 module Assembly
 
-class SendMsg < AssemblyInstruction
+class SendMsg < Instruction
 
   attr_reader :reciever, :method, :args
 
-  def initialize reciever, method, args=[], statement_id=""
+  def initialize reciever, method, args=[], statement_id=:""
     @reciever = reciever
     @method = (method.class == Symbol) ? method : method.to_sym
 

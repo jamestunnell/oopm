@@ -2,23 +2,24 @@ module OOPM
 module Parsing
 
 grammar Expression
+  include Reference
   include Literal
 
   rule expression
-    assignment / binary_operation / method_call / grouped_expression / literal
+    assignment / binary_operation / method_call / grouped_expression / literal / reference
   end
 
   rule assignment
-    name whitespace* "=" whitespace* expression <AssignmentNode>
+    reference whitespace* "=" whitespace* expression <AssignmentNode>
   end
 
   rule binary_operation
-    left_operand:(assignment / method_call / grouped_expression / literal)
+    left_operand:(assignment / method_call / grouped_expression / literal / reference)
     operation_chain:(
       whitespace*
       operator:binary_operator
       whitespace*
-      right_operand:(assignment / method_call / grouped_expression / literal)
+      right_operand:(assignment / method_call / grouped_expression / literal / reference)
     )+
     <BinaryOperationNode>
   end
@@ -36,7 +37,7 @@ grammar Expression
   end
 
   rule method_call
-    method_reciever:(grouped_expression / literal)
+    method_reciever:(grouped_expression / literal / reference)
     call_chain:(
       "."
       method_name
@@ -52,7 +53,7 @@ grammar Expression
   end
 
   rule method_name
-    "[]" / binary_operator / name
+    "[]" / binary_operator / reference
   end
 
   rule args

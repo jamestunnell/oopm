@@ -1,9 +1,8 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe OOPM::Parsing::LiteralParser do
+describe OOPM::Parsing::ReferenceParser do
   before(:each) do
-    @parser = OOPM::Parsing::LiteralParser.new
-    @parser.root = :name
+    @parser = OOPM::Parsing::ReferenceParser.new
   end
 
   it "should parse strings starting with a letter or underscore and followed by valid characters thereafter" do

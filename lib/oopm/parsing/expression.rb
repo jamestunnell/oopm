@@ -11,6 +11,8 @@ module Expression
     @root ||= :expression
   end
 
+  include Reference
+
   include Literal
 
   def _nt_expression
@@ -45,8 +47,13 @@ module Expression
             if r5
               r0 = r5
             else
-              @index = i0
-              r0 = nil
+              r6 = _nt_reference
+              if r6
+                r0 = r6
+              else
+                @index = i0
+                r0 = nil
+              end
             end
           end
         end
@@ -59,7 +66,7 @@ module Expression
   end
 
   module Assignment0
-    def name
+    def reference
       elements[0]
     end
 
@@ -80,7 +87,7 @@ module Expression
     end
 
     i0, s0 = index, []
-    r1 = _nt_name
+    r1 = _nt_reference
     s0 << r1
     if r1
       s2, i2 = [], index
@@ -184,91 +191,101 @@ module Expression
           if r5
             r1 = r5
           else
-            @index = i1
-            r1 = nil
+            r6 = _nt_reference
+            if r6
+              r1 = r6
+            else
+              @index = i1
+              r1 = nil
+            end
           end
         end
       end
     end
     s0 << r1
     if r1
-      s6, i6 = [], index
+      s7, i7 = [], index
       loop do
-        i7, s7 = index, []
-        s8, i8 = [], index
+        i8, s8 = index, []
+        s9, i9 = [], index
         loop do
-          r9 = _nt_whitespace
-          if r9
-            s8 << r9
+          r10 = _nt_whitespace
+          if r10
+            s9 << r10
           else
             break
           end
         end
-        r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
-        s7 << r8
-        if r8
-          r10 = _nt_binary_operator
-          s7 << r10
-          if r10
-            s11, i11 = [], index
+        r9 = instantiate_node(SyntaxNode,input, i9...index, s9)
+        s8 << r9
+        if r9
+          r11 = _nt_binary_operator
+          s8 << r11
+          if r11
+            s12, i12 = [], index
             loop do
-              r12 = _nt_whitespace
-              if r12
-                s11 << r12
+              r13 = _nt_whitespace
+              if r13
+                s12 << r13
               else
                 break
               end
             end
-            r11 = instantiate_node(SyntaxNode,input, i11...index, s11)
-            s7 << r11
-            if r11
-              i13 = index
-              r14 = _nt_assignment
-              if r14
-                r13 = r14
+            r12 = instantiate_node(SyntaxNode,input, i12...index, s12)
+            s8 << r12
+            if r12
+              i14 = index
+              r15 = _nt_assignment
+              if r15
+                r14 = r15
               else
-                r15 = _nt_method_call
-                if r15
-                  r13 = r15
+                r16 = _nt_method_call
+                if r16
+                  r14 = r16
                 else
-                  r16 = _nt_grouped_expression
-                  if r16
-                    r13 = r16
+                  r17 = _nt_grouped_expression
+                  if r17
+                    r14 = r17
                   else
-                    r17 = _nt_literal
-                    if r17
-                      r13 = r17
+                    r18 = _nt_literal
+                    if r18
+                      r14 = r18
                     else
-                      @index = i13
-                      r13 = nil
+                      r19 = _nt_reference
+                      if r19
+                        r14 = r19
+                      else
+                        @index = i14
+                        r14 = nil
+                      end
                     end
                   end
                 end
               end
-              s7 << r13
+              s8 << r14
             end
           end
         end
-        if s7.last
-          r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
-          r7.extend(BinaryOperation0)
+        if s8.last
+          r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
+          r8.extend(BinaryOperation0)
         else
-          @index = i7
-          r7 = nil
+          @index = i8
+          r8 = nil
         end
-        if r7
-          s6 << r7
+        if r8
+          s7 << r8
         else
           break
         end
       end
-      if s6.empty?
-        @index = i6
-        r6 = nil
+      if s7.empty?
+        @index = i7
+        r7 = nil
       else
-        r6 = instantiate_node(SyntaxNode,input, i6...index, s6)
+        r7 = instantiate_node(SyntaxNode,input, i7...index, s7)
       end
-      s0 << r6
+      s0 << r7
     end
     if s0.last
       r0 = instantiate_node(BinaryOperationNode,input, i0...index, s0)
@@ -652,274 +669,279 @@ module Expression
       if r3
         r1 = r3
       else
-        @index = i1
-        r1 = nil
+        r4 = _nt_reference
+        if r4
+          r1 = r4
+        else
+          @index = i1
+          r1 = nil
+        end
       end
     end
     s0 << r1
     if r1
-      s4, i4 = [], index
+      s5, i5 = [], index
       loop do
-        i5, s5 = index, []
+        i6, s6 = index, []
         if has_terminal?(".", false, index)
-          r6 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
           @index += 1
         else
           terminal_parse_failure(".")
-          r6 = nil
+          r7 = nil
         end
-        s5 << r6
-        if r6
-          r7 = _nt_method_name
-          s5 << r7
-          if r7
-            i9 = index
+        s6 << r7
+        if r7
+          r8 = _nt_method_name
+          s6 << r8
+          if r8
+            i10 = index
             if has_terminal?('\G[!?]', true, index)
-              r10 = true
+              r11 = true
               @index += 1
             else
-              r10 = nil
+              r11 = nil
             end
-            if r10
-              r9 = r10
+            if r11
+              r10 = r11
             else
-              i11, s11 = index, []
-              s12, i12 = [], index
+              i12, s12 = index, []
+              s13, i13 = [], index
               loop do
-                r13 = _nt_whitespace
-                if r13
-                  s12 << r13
+                r14 = _nt_whitespace
+                if r14
+                  s13 << r14
                 else
                   break
                 end
               end
-              r12 = instantiate_node(SyntaxNode,input, i12...index, s12)
-              s11 << r12
-              if r12
+              r13 = instantiate_node(SyntaxNode,input, i13...index, s13)
+              s12 << r13
+              if r13
                 if has_terminal?("=", false, index)
-                  r14 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                  r15 = instantiate_node(SyntaxNode,input, index...(index + 1))
                   @index += 1
                 else
                   terminal_parse_failure("=")
-                  r14 = nil
+                  r15 = nil
                 end
-                s11 << r14
-                if r14
-                  s15, i15 = [], index
+                s12 << r15
+                if r15
+                  s16, i16 = [], index
                   loop do
-                    r16 = _nt_whitespace
-                    if r16
-                      s15 << r16
+                    r17 = _nt_whitespace
+                    if r17
+                      s16 << r17
                     else
                       break
                     end
                   end
-                  r15 = instantiate_node(SyntaxNode,input, i15...index, s15)
-                  s11 << r15
+                  r16 = instantiate_node(SyntaxNode,input, i16...index, s16)
+                  s12 << r16
                 end
               end
-              if s11.last
-                r11 = instantiate_node(SyntaxNode,input, i11...index, s11)
-                r11.extend(MethodCall0)
+              if s12.last
+                r12 = instantiate_node(SyntaxNode,input, i12...index, s12)
+                r12.extend(MethodCall0)
               else
-                @index = i11
-                r11 = nil
+                @index = i12
+                r12 = nil
               end
-              if r11
-                r9 = r11
+              if r12
+                r10 = r12
               else
-                @index = i9
-                r9 = nil
+                @index = i10
+                r10 = nil
               end
             end
-            if r9
-              r8 = r9
+            if r10
+              r9 = r10
             else
-              r8 = instantiate_node(SyntaxNode,input, index...index)
+              r9 = instantiate_node(SyntaxNode,input, index...index)
             end
-            s5 << r8
-            if r8
-              i17 = index
-              i18, s18 = index, []
+            s6 << r9
+            if r9
+              i18 = index
+              i19, s19 = index, []
               if has_terminal?("(", false, index)
-                r19 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                r20 = instantiate_node(SyntaxNode,input, index...(index + 1))
                 @index += 1
               else
                 terminal_parse_failure("(")
-                r19 = nil
+                r20 = nil
               end
-              s18 << r19
-              if r19
-                s20, i20 = [], index
+              s19 << r20
+              if r20
+                s21, i21 = [], index
                 loop do
-                  r21 = _nt_whitespace
-                  if r21
-                    s20 << r21
+                  r22 = _nt_whitespace
+                  if r22
+                    s21 << r22
                   else
                     break
                   end
                 end
-                r20 = instantiate_node(SyntaxNode,input, i20...index, s20)
-                s18 << r20
-                if r20
-                  r22 = _nt_args
-                  s18 << r22
-                  if r22
-                    s23, i23 = [], index
+                r21 = instantiate_node(SyntaxNode,input, i21...index, s21)
+                s19 << r21
+                if r21
+                  r23 = _nt_args
+                  s19 << r23
+                  if r23
+                    s24, i24 = [], index
                     loop do
-                      r24 = _nt_whitespace
-                      if r24
-                        s23 << r24
+                      r25 = _nt_whitespace
+                      if r25
+                        s24 << r25
                       else
                         break
                       end
                     end
-                    r23 = instantiate_node(SyntaxNode,input, i23...index, s23)
-                    s18 << r23
-                    if r23
+                    r24 = instantiate_node(SyntaxNode,input, i24...index, s24)
+                    s19 << r24
+                    if r24
                       if has_terminal?(")", false, index)
-                        r25 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                        r26 = instantiate_node(SyntaxNode,input, index...(index + 1))
                         @index += 1
                       else
                         terminal_parse_failure(")")
-                        r25 = nil
+                        r26 = nil
                       end
-                      s18 << r25
+                      s19 << r26
                     end
                   end
                 end
               end
-              if s18.last
-                r18 = instantiate_node(SyntaxNode,input, i18...index, s18)
-                r18.extend(MethodCall1)
+              if s19.last
+                r19 = instantiate_node(SyntaxNode,input, i19...index, s19)
+                r19.extend(MethodCall1)
               else
-                @index = i18
-                r18 = nil
+                @index = i19
+                r19 = nil
               end
-              if r18
-                r17 = r18
+              if r19
+                r18 = r19
               else
-                i26, s26 = index, []
+                i27, s27 = index, []
                 if has_terminal?("(", false, index)
-                  r27 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                  r28 = instantiate_node(SyntaxNode,input, index...(index + 1))
                   @index += 1
                 else
                   terminal_parse_failure("(")
-                  r27 = nil
+                  r28 = nil
                 end
-                s26 << r27
-                if r27
-                  s28, i28 = [], index
+                s27 << r28
+                if r28
+                  s29, i29 = [], index
                   loop do
-                    r29 = _nt_whitespace
-                    if r29
-                      s28 << r29
+                    r30 = _nt_whitespace
+                    if r30
+                      s29 << r30
                     else
                       break
                     end
                   end
-                  r28 = instantiate_node(SyntaxNode,input, i28...index, s28)
-                  s26 << r28
-                  if r28
+                  r29 = instantiate_node(SyntaxNode,input, i29...index, s29)
+                  s27 << r29
+                  if r29
                     if has_terminal?(")", false, index)
-                      r30 = instantiate_node(SyntaxNode,input, index...(index + 1))
+                      r31 = instantiate_node(SyntaxNode,input, index...(index + 1))
                       @index += 1
                     else
                       terminal_parse_failure(")")
-                      r30 = nil
+                      r31 = nil
                     end
-                    s26 << r30
+                    s27 << r31
                   end
                 end
-                if s26.last
-                  r26 = instantiate_node(SyntaxNode,input, i26...index, s26)
-                  r26.extend(MethodCall2)
+                if s27.last
+                  r27 = instantiate_node(SyntaxNode,input, i27...index, s27)
+                  r27.extend(MethodCall2)
                 else
-                  @index = i26
-                  r26 = nil
+                  @index = i27
+                  r27 = nil
                 end
-                if r26
-                  r17 = r26
+                if r27
+                  r18 = r27
                 else
-                  i31, s31 = index, []
-                  s32, i32 = [], index
+                  i32, s32 = index, []
+                  s33, i33 = [], index
                   loop do
-                    r33 = _nt_whitespace
-                    if r33
-                      s32 << r33
+                    r34 = _nt_whitespace
+                    if r34
+                      s33 << r34
                     else
                       break
                     end
                   end
-                  r32 = instantiate_node(SyntaxNode,input, i32...index, s32)
-                  s31 << r32
-                  if r32
-                    r34 = _nt_args
-                    s31 << r34
-                    if r34
-                      s35, i35 = [], index
+                  r33 = instantiate_node(SyntaxNode,input, i33...index, s33)
+                  s32 << r33
+                  if r33
+                    r35 = _nt_args
+                    s32 << r35
+                    if r35
+                      s36, i36 = [], index
                       loop do
-                        r36 = _nt_whitespace
-                        if r36
-                          s35 << r36
+                        r37 = _nt_whitespace
+                        if r37
+                          s36 << r37
                         else
                           break
                         end
                       end
-                      r35 = instantiate_node(SyntaxNode,input, i35...index, s35)
-                      s31 << r35
+                      r36 = instantiate_node(SyntaxNode,input, i36...index, s36)
+                      s32 << r36
                     end
                   end
-                  if s31.last
-                    r31 = instantiate_node(SyntaxNode,input, i31...index, s31)
-                    r31.extend(MethodCall3)
+                  if s32.last
+                    r32 = instantiate_node(SyntaxNode,input, i32...index, s32)
+                    r32.extend(MethodCall3)
                   else
-                    @index = i31
-                    r31 = nil
+                    @index = i32
+                    r32 = nil
                   end
-                  if r31
-                    r17 = r31
+                  if r32
+                    r18 = r32
                   else
                     if has_terminal?("", false, index)
-                      r37 = instantiate_node(SyntaxNode,input, index...(index + 0))
+                      r38 = instantiate_node(SyntaxNode,input, index...(index + 0))
                       @index += 0
                     else
                       terminal_parse_failure("")
-                      r37 = nil
+                      r38 = nil
                     end
-                    if r37
-                      r17 = r37
+                    if r38
+                      r18 = r38
                     else
-                      @index = i17
-                      r17 = nil
+                      @index = i18
+                      r18 = nil
                     end
                   end
                 end
               end
-              s5 << r17
+              s6 << r18
             end
           end
         end
-        if s5.last
-          r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
-          r5.extend(MethodCall4)
+        if s6.last
+          r6 = instantiate_node(SyntaxNode,input, i6...index, s6)
+          r6.extend(MethodCall4)
         else
-          @index = i5
-          r5 = nil
+          @index = i6
+          r6 = nil
         end
-        if r5
-          s4 << r5
+        if r6
+          s5 << r6
         else
           break
         end
       end
-      if s4.empty?
-        @index = i4
-        r4 = nil
+      if s5.empty?
+        @index = i5
+        r5 = nil
       else
-        r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
+        r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
       end
-      s0 << r4
+      s0 << r5
     end
     if s0.last
       r0 = instantiate_node(MethodCallNode,input, i0...index, s0)
@@ -960,7 +982,7 @@ module Expression
       if r2
         r0 = r2
       else
-        r3 = _nt_name
+        r3 = _nt_reference
         if r3
           r0 = r3
         else
