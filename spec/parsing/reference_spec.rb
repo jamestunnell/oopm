@@ -69,4 +69,12 @@ describe OOPM::Parsing::ReferenceParser do
       @parser.parse(keyword).should be_nil
     end
   end
+  
+  it "should produce one REF assembly instruction with one symbol operand" do
+    output = @parser.parse("y").to_assembly
+    output.length.should be 1
+    output[0].instruction.should be OOPM::Assembly::Instruction::INSTRUCTION_REFERENCE
+    output[0].operands.length.should be 1
+    output[0].operands[0].should eq(:y)
+  end
 end

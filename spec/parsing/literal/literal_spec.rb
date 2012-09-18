@@ -24,5 +24,17 @@ describe OOPM::Parsing::LiteralParser do
     @parser.parse('"\\"hello world\\""').should be_true
     @parser.parse("'hello world'").should be_true
     @parser.parse("'\\'hello world\\''").should be_true
-  end  
+  end
+  
+  it "should produce one LIT assembly instruction with one operand value" do
+    values = [17, "hello", :my_symbol123]
+    
+    values.each do |value|
+      output = @parser.parse(value.inspect).to_assembly
+      output.length.should be 1
+      output[0].instruction.should be OOPM::Assembly::Instruction::INSTRUCTION_LITERAL
+      output[0].operands.length.should be 1
+      output[0].operands[0].should eq(value)
+    end
+  end
 end

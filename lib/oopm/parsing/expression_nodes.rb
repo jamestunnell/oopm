@@ -9,7 +9,7 @@ class AssignmentNode < Treetop::Runtime::SyntaxNode
     assembly_statements = expression.to_assembly(reference.text_value.to_sym)
     
     if !assign_to.empty?
-      assembly_statements << Assembly::Reference.new(assign_to)
+      assembly_statements << Assembly::Reference.new(assembly_statements.last.statement_id, assign_to)
     end
     
     return assembly_statements
