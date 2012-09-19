@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 describe OOPM::Parsing::ExpressionParser do
 
   object_strings = [ '1', 'hello', "\"hello\""]
-  expression_strings = ["my_obj", "1", '"hello world"', "1.times", "no.way()", "(1+2)", "(5 / 5)"]
+  expression_strings = ["my_obj", "1", '"hello world"', "1.times", "no.way()", "(1+2)", "(5 / 5)", "5.times[1,2,3]", "this.should = :be_okay"]
 
   before(:each) do
     @parser = OOPM::Parsing::ExpressionParser.new

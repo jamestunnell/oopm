@@ -54,7 +54,54 @@ describe OOPM::Parsing::ExpressionParser do
       @parser.parse(object_string + '.do_nothing().and_more().and_more().and_more().ad_infinitum').should be_true
     end
   end
+
+  it "should parse a simple array access" do
+    object_strings.each do |object_string|
+      @parser.parse(object_string + '[0]').should be_true
+      @parser.parse(object_string + '[1,2,3]').should be_true
+      @parser.parse(object_string + '[does_nothing.and_more()]').should be_true
+    end
+  end
   
+  it "should parse a chained method call / array access" do
+    object_strings.each do |object_string|
+      @parser.parse(object_string + '[0].does_it()').should be_true
+      @parser.parse(object_string + '.does_it[1,2,3]').should be_true
+      @parser.parse(object_string + '[:you].and_me[:are_just_fine]').should be_true
+    end
+  end
+
+  it "should parse a simple method call (no parenth, no args) followed by an assignment" do
+    object_strings.each do |object_string|
+      @parser.parse(object_string + '.do_nothing = "okay?"').should be_true
+      @parser.parse(object_string + '.do_nothing= this.is_okay()').should be_true
+      @parser.parse(object_string + '.do_nothing   =  :just_fine').should be_true
+    end
+  end
+
+  it "should not parse a simple method call (with parenth) followed by an assignment" do
+    object_strings.each do |object_string|
+      @parser.parse(object_string + '.do_nothing() = "okay?"').should be_nil
+      @parser.parse(object_string + '.do_nothing()= this.is_not_okay()').should be_nil
+      @parser.parse(object_string + '.do_nothing()   =  :not_fine').should be_nil
+    end
+  end
+  
+  it "should parse a chained method call (last call has no parenth, no args) followed by an assignment" do
+    object_strings.each do |object_string|
+      @parser.parse(object_string + '.do_nothing(a,b,c).and_more = 5').should be_true
+      @parser.parse(object_string + '.do_nothing.and_more[5] = :good_stuff').should be_true
+      @parser.parse(object_string + '.do_nothing.and_more("stuff").and_more= best.ever()').should be_true
+    end
+  end
+  
+  it "should not parse a chained method call (last call has parenth) followed by an assignment" do
+    object_strings.each do |object_string|
+      @parser.parse(object_string + '.do_nothing(a,b,c).and_more(2) = 5').should be_nil
+      @parser.parse(object_string + '.do_nothing.and_more("stuff")= best.ever()').should be_nil
+    end
+  end
+
   it "should produce one MSG instruction with 2 operands from a simple no-arg method call" do
     method_calls = ["you_should.do_this", '3.licks', "the_great.bambi()"]
     

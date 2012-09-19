@@ -38,21 +38,31 @@ grammar Expression
   
   rule method_call
     method_reciever:(grouped_expression / literal / reference)
-    call_chain:(
-      call_with_parenth /
-      array_access /
-      (call_no_parenth_with_args !(call_with_parenth / array_access / call_no_parenth_no_args)) /
-      call_no_parenth_no_args
-    )+
+    call_chain
     <MethodCallNode>
+  end
+  
+  rule call_chain
+  (
+    call_with_parenth /
+    (array_access_assign !call_chain)/
+    array_access /
+    (call_no_parenth_assign !call_chain)/ 
+    (call_no_parenth_with_args !call_chain) /
+    call_no_parenth_no_args
+  )+
   end
   
   rule call_with_parenth
     call_with_parenth_with_args / call_with_parenth_no_args
   end
+
+  rule array_access_assign
+    ws* prefix:"[" ws* method_args ws* suffix:("]" ws* "=") ws* assign:expression
+  end
   
   rule array_access
-    array_access_with_args / array_access_no_args
+    (ws* prefix:"[" ws* method_args ws* suffix:"]")
   end
   
   rule call_with_parenth_with_args
@@ -61,14 +71,6 @@ grammar Expression
   
   rule call_with_parenth_no_args
     ws* "." ws* prefix:method_name suffix:"" ws* "(" ws* ")"
-  end
-
-  rule array_access_with_args
-    ws* prefix:"[" ws* method_args ws* suffix:"]"
-  end
-
-  rule array_access_no_args
-    ws* prefix:"[" ws* suffix:"]"
   end
   
   rule call_no_parenth_with_args
@@ -79,6 +81,10 @@ grammar Expression
     ws* "." ws* prefix:method_name suffix:""
   end
 
+  rule call_no_parenth_assign
+    ws* "." ws* prefix:method_name suffix:(ws* "=") ws* assign:expression
+  end
+  
   rule method_name
     "[]" / binary_operator / reference
   end
