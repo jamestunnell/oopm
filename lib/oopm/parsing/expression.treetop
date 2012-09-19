@@ -10,15 +10,15 @@ grammar Expression
   end
 
   rule assignment
-    reference whitespace* "=" whitespace* expression <AssignmentNode>
+    reference ws* "=" ws* expression <AssignmentNode>
   end
 
   rule binary_operation
     left_operand:(assignment / method_call / grouped_expression / literal / reference)
     operation_chain:(
-      whitespace*
+      ws*
       operator:binary_operator
-      whitespace*
+      ws*
       right_operand:(assignment / method_call / grouped_expression / literal / reference)
     )+
     <BinaryOperationNode>
@@ -56,27 +56,27 @@ grammar Expression
   end
   
   rule call_with_parenth_with_args
-    whitespace* "." whitespace* prefix:method_name suffix:"" whitespace* "(" whitespace* method_args whitespace* ")"
+    ws* "." ws* prefix:method_name suffix:"" ws* "(" ws* method_args ws* ")"
   end
   
   rule call_with_parenth_no_args
-    whitespace* "." whitespace* prefix:method_name suffix:"" whitespace* "(" whitespace* ")"
+    ws* "." ws* prefix:method_name suffix:"" ws* "(" ws* ")"
   end
 
   rule array_access_with_args
-    whitespace* prefix:"[" whitespace* method_args whitespace* suffix:"]"
+    ws* prefix:"[" ws* method_args ws* suffix:"]"
   end
 
   rule array_access_no_args
-    whitespace* prefix:"[" whitespace* suffix:"]"
+    ws* prefix:"[" ws* suffix:"]"
   end
   
   rule call_no_parenth_with_args
-    whitespace* "." whitespace* prefix:method_name suffix:"" whitespace+ method_args
+    ws* "." ws* prefix:method_name suffix:"" ws+ method_args
   end
 
   rule call_no_parenth_no_args
-    whitespace* "." whitespace* prefix:method_name suffix:""
+    ws* "." ws* prefix:method_name suffix:""
   end
 
   rule method_name
@@ -84,14 +84,14 @@ grammar Expression
   end
 
   rule method_args
-    first_arg:expression whitespace* more_args:("," whitespace* another_arg:expression whitespace*)*
+    first_arg:expression ws* more_args:("," ws* another_arg:expression ws*)*
   end
 
   rule grouped_expression
-    "(" whitespace* expression whitespace* ")" <GroupedExpressionNode>
+    "(" ws* expression ws* ")" <GroupedExpressionNode>
   end
 
-  rule whitespace
+  rule ws
     [\s]
   end
 end
