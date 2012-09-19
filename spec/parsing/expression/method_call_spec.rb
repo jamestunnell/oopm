@@ -24,19 +24,6 @@ describe OOPM::Parsing::ExpressionParser do
     end
   end
 
-  it "should not parse a method call where there are spaces between the . and method name" do
-    object_strings.each do |object_string|
-      @parser.parse(object_string + '. do_nothing()').should be_nil
-      @parser.parse(object_string + '. do_nothing').should be_nil
-    end
-  end
-
-  it "should not parse a method call where there are spaces between the method name and ()" do
-    object_strings.each do |object_string|
-      @parser.parse(object_string + '.do_nothing ()').should be_nil
-    end
-  end
-
   it "should parse a method call with one argument" do
     object_strings.each do |object_string|
       @parser.parse(object_string + '.do_nothing(123)').should be_true
@@ -78,7 +65,7 @@ describe OOPM::Parsing::ExpressionParser do
       output[0].operands.length.should be 2
     end
   end
-
+  
   it "should produce one MSG instruction with 4 operands from a simple two-arg method call" do
     method_calls = ["you_should.do_this(:twice,:thrice)", '3.licks("to the center",:of_a_tootsie_pop)', "the_great.bambi(1,2)"]
     
@@ -89,7 +76,7 @@ describe OOPM::Parsing::ExpressionParser do
       output[0].operands.length.should be 4
     end
   end
-
+  
   it "should produce two MSG instructions with 3 operands each from a one-arg nested method call" do
     output = @parser.parse("one.time(and.once(:again))").to_assembly
     output.length.should be 2

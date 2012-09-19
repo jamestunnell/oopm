@@ -45,7 +45,6 @@ describe OOPM::Parsing::ExpressionParser do
     it "should produce correct assembly from a complicated expression" do
       output = @parser.parse("x = y = (2*x) + 5.power(2)").to_assembly
       
-      puts output
       output.length.should be 4
       output[0].instruction.should be OOPM::Assembly::Instruction::INSTRUCTION_SEND_MSG
       output[1].instruction.should be OOPM::Assembly::Instruction::INSTRUCTION_SEND_MSG

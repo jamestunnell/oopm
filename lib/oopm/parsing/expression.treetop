@@ -35,28 +35,55 @@ grammar Expression
      ("/" [/=]?) /
      ("%" "="?)
   end
-
+  
   rule method_call
     method_reciever:(grouped_expression / literal / reference)
     call_chain:(
-      "."
-      method_name
-      suffix:([!?] / (whitespace* "=" whitespace*))?
-      method_args:(
-        ("(" whitespace* args whitespace* ")") /
-        ( "(" whitespace* ")" ) /
-        ( whitespace* args whitespace* ) /
-        ""
-      )
+      call_with_parenth /
+      array_access /
+      (call_no_parenth_with_args !(call_with_parenth / array_access / call_no_parenth_no_args)) /
+      call_no_parenth_no_args
     )+
     <MethodCallNode>
+  end
+  
+  rule call_with_parenth
+    call_with_parenth_with_args / call_with_parenth_no_args
+  end
+  
+  rule array_access
+    array_access_with_args / array_access_no_args
+  end
+  
+  rule call_with_parenth_with_args
+    whitespace* "." whitespace* prefix:method_name suffix:"" whitespace* "(" whitespace* method_args whitespace* ")"
+  end
+  
+  rule call_with_parenth_no_args
+    whitespace* "." whitespace* prefix:method_name suffix:"" whitespace* "(" whitespace* ")"
+  end
+
+  rule array_access_with_args
+    whitespace* prefix:"[" whitespace* method_args whitespace* suffix:"]"
+  end
+
+  rule array_access_no_args
+    whitespace* prefix:"[" whitespace* suffix:"]"
+  end
+  
+  rule call_no_parenth_with_args
+    whitespace* "." whitespace* prefix:method_name suffix:"" whitespace+ method_args
+  end
+
+  rule call_no_parenth_no_args
+    whitespace* "." whitespace* prefix:method_name suffix:""
   end
 
   rule method_name
     "[]" / binary_operator / reference
   end
 
-  rule args
+  rule method_args
     first_arg:expression whitespace* more_args:("," whitespace* another_arg:expression whitespace*)*
   end
 

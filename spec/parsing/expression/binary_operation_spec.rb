@@ -43,7 +43,7 @@ describe OOPM::Parsing::ExpressionParser do
       output[0].operands.length.should be 3
     end
   end
-
+  
   it "should produce two MSG instructions for binary operation containing a nested simple binary operation" do
     output = @parser.parse("(5 + 5) * 2").to_assembly
     output.length.should be 2
@@ -52,7 +52,7 @@ describe OOPM::Parsing::ExpressionParser do
     output[0].operands.length.should be 3
     output[1].operands.length.should be 3
   end
-
+  
   it "should produce two MSG instructions for a sequence of two binary operations" do
     output = @parser.parse("5 + 5 * 2").to_assembly
     output.length.should be 2

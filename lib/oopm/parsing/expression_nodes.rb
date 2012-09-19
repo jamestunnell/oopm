@@ -83,17 +83,16 @@ class MethodCallNode < Treetop::Runtime::SyntaxNode
 
     for i in 0...call_chain.elements.length
 
-      method = call_chain.elements[i].method_name.text_value.to_sym
-
+      method = (call_chain.elements[i].prefix.text_value + call_chain.elements[i].suffix.text_value).to_sym
       assign = (i == (call_chain.elements.length - 1)) ? assign_to : :""
 
-      method_args = call_chain.elements[i].method_args
       arg_nodes = []
-      if method_args.respond_to? :args
-        arg_nodes << method_args.args.first_arg
-
-        if method_args.args.respond_to? :more_args
-          method_args.args.more_args.elements.each do |element|
+      if call_chain.elements[i].respond_to? :method_args
+        method_args = call_chain.elements[i].method_args
+        arg_nodes << method_args.first_arg
+        
+        if method_args.respond_to? :more_args
+          method_args.more_args.elements.each do |element|
             arg_nodes << element.another_arg
           end
         end
@@ -112,6 +111,7 @@ class MethodCallNode < Treetop::Runtime::SyntaxNode
       end
 
       assembly_statements << Assembly::SendMsg.new(reciever, method, args, assign)
+      reciever = assembly_statements.last.statement_id
     end
 
     return assembly_statements
