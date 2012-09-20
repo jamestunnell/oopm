@@ -662,27 +662,6 @@ module Expression
     r0
   end
 
-  module CallChain0
-    def array_access_assign
-      elements[0]
-    end
-
-  end
-
-  module CallChain1
-    def call_no_parenth_assign
-      elements[0]
-    end
-
-  end
-
-  module CallChain2
-    def call_no_parenth_with_args
-      elements[0]
-    end
-
-  end
-
   def _nt_call_chain
     start_index = index
     if node_cache[:call_chain].has_key?(index)
@@ -701,85 +680,25 @@ module Expression
       if r2
         r1 = r2
       else
-        i3, s3 = index, []
-        r4 = _nt_array_access_assign
-        s3 << r4
-        if r4
-          i5 = index
-          r6 = _nt_call_chain
-          if r6
-            r5 = nil
-          else
-            @index = i5
-            r5 = instantiate_node(SyntaxNode,input, index...index)
-          end
-          s3 << r5
-        end
-        if s3.last
-          r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
-          r3.extend(CallChain0)
-        else
-          @index = i3
-          r3 = nil
-        end
+        r3 = _nt_array_access_assign
         if r3
           r1 = r3
         else
-          r7 = _nt_array_access
-          if r7
-            r1 = r7
+          r4 = _nt_array_access
+          if r4
+            r1 = r4
           else
-            i8, s8 = index, []
-            r9 = _nt_call_no_parenth_assign
-            s8 << r9
-            if r9
-              i10 = index
-              r11 = _nt_call_chain
-              if r11
-                r10 = nil
-              else
-                @index = i10
-                r10 = instantiate_node(SyntaxNode,input, index...index)
-              end
-              s8 << r10
-            end
-            if s8.last
-              r8 = instantiate_node(SyntaxNode,input, i8...index, s8)
-              r8.extend(CallChain1)
+            r5 = _nt_call_no_parenth_assign
+            if r5
+              r1 = r5
             else
-              @index = i8
-              r8 = nil
-            end
-            if r8
-              r1 = r8
-            else
-              i12, s12 = index, []
-              r13 = _nt_call_no_parenth_with_args
-              s12 << r13
-              if r13
-                i14 = index
-                r15 = _nt_call_chain
-                if r15
-                  r14 = nil
-                else
-                  @index = i14
-                  r14 = instantiate_node(SyntaxNode,input, index...index)
-                end
-                s12 << r14
-              end
-              if s12.last
-                r12 = instantiate_node(SyntaxNode,input, i12...index, s12)
-                r12.extend(CallChain2)
+              r6 = _nt_call_no_parenth_with_args
+              if r6
+                r1 = r6
               else
-                @index = i12
-                r12 = nil
-              end
-              if r12
-                r1 = r12
-              else
-                r16 = _nt_call_no_parenth_no_args
-                if r16
-                  r1 = r16
+                r7 = _nt_call_no_parenth_no_args
+                if r7
+                  r1 = r7
                 else
                   @index = i1
                   r1 = nil
@@ -856,6 +775,7 @@ module Expression
     def assign
       elements[7]
     end
+
   end
 
   def _nt_array_access_assign
@@ -973,6 +893,17 @@ module Expression
                 if r14
                   r16 = _nt_expression
                   s0 << r16
+                  if r16
+                    i17 = index
+                    r18 = _nt_call_chain
+                    if r18
+                      r17 = nil
+                    else
+                      @index = i17
+                      r17 = instantiate_node(SyntaxNode,input, index...index)
+                    end
+                    s0 << r17
+                  end
                 end
               end
             end
@@ -1386,6 +1317,7 @@ module Expression
     def method_args
       elements[6]
     end
+
   end
 
   def _nt_call_no_parenth_with_args
@@ -1464,6 +1396,17 @@ module Expression
               if r8
                 r10 = _nt_method_args
                 s0 << r10
+                if r10
+                  i11 = index
+                  r12 = _nt_call_chain
+                  if r12
+                    r11 = nil
+                  else
+                    @index = i11
+                    r11 = instantiate_node(SyntaxNode,input, index...index)
+                  end
+                  s0 << r11
+                end
               end
             end
           end
@@ -1581,6 +1524,7 @@ module Expression
     def assign
       elements[6]
     end
+
   end
 
   def _nt_call_no_parenth_assign
@@ -1676,6 +1620,17 @@ module Expression
               if r11
                 r13 = _nt_expression
                 s0 << r13
+                if r13
+                  i14 = index
+                  r15 = _nt_call_chain
+                  if r15
+                    r14 = nil
+                  else
+                    @index = i14
+                    r14 = instantiate_node(SyntaxNode,input, index...index)
+                  end
+                  s0 << r14
+                end
               end
             end
           end
@@ -1695,6 +1650,9 @@ module Expression
     r0
   end
 
+  module MethodName0
+  end
+
   def _nt_method_name
     start_index = index
     if node_cache[:method_name].has_key?(index)
@@ -1707,23 +1665,47 @@ module Expression
     end
 
     i0 = index
+    i1, s1 = index, []
     if has_terminal?("[]", false, index)
-      r1 = instantiate_node(SyntaxNode,input, index...(index + 2))
+      r2 = instantiate_node(SyntaxNode,input, index...(index + 2))
       @index += 2
     else
       terminal_parse_failure("[]")
+      r2 = nil
+    end
+    s1 << r2
+    if r2
+      if has_terminal?("=", false, index)
+        r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        @index += 1
+      else
+        terminal_parse_failure("=")
+        r4 = nil
+      end
+      if r4
+        r3 = r4
+      else
+        r3 = instantiate_node(SyntaxNode,input, index...index)
+      end
+      s1 << r3
+    end
+    if s1.last
+      r1 = instantiate_node(SyntaxNode,input, i1...index, s1)
+      r1.extend(MethodName0)
+    else
+      @index = i1
       r1 = nil
     end
     if r1
       r0 = r1
     else
-      r2 = _nt_binary_operator
-      if r2
-        r0 = r2
+      r5 = _nt_binary_operator
+      if r5
+        r0 = r5
       else
-        r3 = _nt_reference
-        if r3
-          r0 = r3
+        r6 = _nt_reference
+        if r6
+          r0 = r6
         else
           @index = i0
           r0 = nil

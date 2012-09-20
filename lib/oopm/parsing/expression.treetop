@@ -45,10 +45,10 @@ grammar Expression
   rule call_chain
   (
     call_with_parenth /
-    (array_access_assign !call_chain)/
+    array_access_assign /
     array_access /
-    (call_no_parenth_assign !call_chain)/ 
-    (call_no_parenth_with_args !call_chain) /
+    call_no_parenth_assign / 
+    call_no_parenth_with_args /
     call_no_parenth_no_args
   )+
   end
@@ -58,7 +58,7 @@ grammar Expression
   end
 
   rule array_access_assign
-    ws* prefix:"[" ws* method_args ws* suffix:("]" ws* "=") ws* assign:expression
+    ws* prefix:"[" ws* method_args ws* suffix:("]" ws* "=") ws* assign:expression !call_chain
   end
   
   rule array_access
@@ -74,7 +74,7 @@ grammar Expression
   end
   
   rule call_no_parenth_with_args
-    ws* "." ws* prefix:method_name suffix:"" ws+ method_args
+    ws* "." ws* prefix:method_name suffix:"" ws+ method_args !call_chain
   end
 
   rule call_no_parenth_no_args
@@ -82,11 +82,11 @@ grammar Expression
   end
 
   rule call_no_parenth_assign
-    ws* "." ws* prefix:method_name suffix:(ws* "=") ws* assign:expression
+    ws* "." ws* prefix:method_name suffix:(ws* "=") ws* assign:expression !call_chain
   end
   
   rule method_name
-    "[]" / binary_operator / reference
+    ("[]" "="?) / binary_operator / reference
   end
 
   rule method_args

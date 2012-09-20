@@ -132,4 +132,52 @@ describe OOPM::Parsing::ExpressionParser do
     output[1].instruction.should be OOPM::Assembly::Instruction::INSTRUCTION_SEND_MSG
     output[1].operands.length.should be 3
   end
+
+  it "should produce one MSG instruction with 3 operands from an assignment method call" do
+    output = @parser.parse("one.time = 5").to_assembly
+    output.length.should be 1
+    output[0].instruction.should be OOPM::Assembly::Instruction::INSTRUCTION_SEND_MSG
+    output[0].operands.length.should be 3
+  end
+
+  it "should produce two MSG instructions with 3 operands each from a one-arg nested assignment method call" do
+    output = @parser.parse("one.time('hello').only = 5").to_assembly
+    output.length.should be 2
+    output[0].instruction.should be OOPM::Assembly::Instruction::INSTRUCTION_SEND_MSG
+    output[0].operands.length.should be 3
+    output[1].instruction.should be OOPM::Assembly::Instruction::INSTRUCTION_SEND_MSG
+    output[1].operands.length.should be 3
+  end
+
+  it "should produce one MSG instruction with 2 operands from a simple array access" do
+    output = @parser.parse("my_array[55]").to_assembly
+    output.length.should be 1
+    output[0].instruction.should be OOPM::Assembly::Instruction::INSTRUCTION_SEND_MSG
+    output[0].operands.length.should be 3
+  end
+  
+  it "should produce one MSG instruction with 3 operands from a simple array assignment" do
+    output = @parser.parse("my_array[55] = 210").to_assembly
+    output.length.should be 1
+    output[0].instruction.should be OOPM::Assembly::Instruction::INSTRUCTION_SEND_MSG
+    output[0].operands.length.should be 4
+  end  
+  
+  it "should produce two MSG instructions with 2 operands each from a two-level nested array access" do
+    output = @parser.parse("my_array[5][4]").to_assembly
+    output.length.should be 2
+    output[0].instruction.should be OOPM::Assembly::Instruction::INSTRUCTION_SEND_MSG
+    output[0].operands.length.should be 3
+    output[1].instruction.should be OOPM::Assembly::Instruction::INSTRUCTION_SEND_MSG
+    output[1].operands.length.should be 3
+  end
+
+  it "should produce two MSG instructions with 3/4 operands each from a two-level nested array assignment" do
+    output = @parser.parse("my_array[5][4] = 4").to_assembly
+    output.length.should be 2
+    output[0].instruction.should be OOPM::Assembly::Instruction::INSTRUCTION_SEND_MSG
+    output[0].operands.length.should be 3
+    output[1].instruction.should be OOPM::Assembly::Instruction::INSTRUCTION_SEND_MSG
+    output[1].operands.length.should be 4
+  end
 end
