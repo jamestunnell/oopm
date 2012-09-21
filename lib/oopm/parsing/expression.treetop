@@ -4,9 +4,14 @@ module Parsing
 grammar Expression
   include Reference
   include Literal
-
+  include Container
+  
   rule expression
-    assignment / binary_operation / method_call / grouped_expression / literal / reference
+    assignment / binary_operation / method_call / grouped_expression / container / literal / reference
+  end
+
+  rule ws
+    [\s]
   end
 
   rule assignment
@@ -95,10 +100,6 @@ grammar Expression
 
   rule grouped_expression
     "(" ws* expression ws* ")" <GroupedExpressionNode>
-  end
-
-  rule ws
-    [\s]
   end
 end
 

@@ -8,6 +8,7 @@ module NodeType
   NODE_TYPE_BINARY_OPERATION = :NodeTypeBinaryOperation
   NODE_TYPE_METHOD_CALL = :NodeTypeMethodCall
   NODE_TYPE_GROUPED_EXPRESSION = :NodeTypeGroupedExpression
+  NODE_TYPE_CONTAINER = :NodeTypeContainer
   
   def reference?
     return node_type == NODE_TYPE_REFERENCE
@@ -31,6 +32,10 @@ module NodeType
   
   def grouped_expression?
     return node_type == NODE_TYPE_GROUPED_EXPRESSION
+  end  
+
+  def container?
+    return node_type == NODE_TYPE_CONTAINER
   end  
 end
 

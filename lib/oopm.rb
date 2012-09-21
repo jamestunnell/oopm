@@ -12,6 +12,8 @@ require 'oopm/parsing/reference'
 require 'oopm/parsing/reference_node'
 require 'oopm/parsing/literal'
 require 'oopm/parsing/literal_node'
+require 'oopm/parsing/container'
+require 'oopm/parsing/container_nodes'
 require 'oopm/parsing/expression'
 require 'oopm/parsing/expression_nodes'
 

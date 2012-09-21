@@ -15,6 +15,8 @@ module Expression
 
   include Literal
 
+  include Container
+
   def _nt_expression
     start_index = index
     if node_cache[:expression].has_key?(index)
@@ -43,16 +45,21 @@ module Expression
           if r4
             r0 = r4
           else
-            r5 = _nt_literal
+            r5 = _nt_container
             if r5
               r0 = r5
             else
-              r6 = _nt_reference
+              r6 = _nt_literal
               if r6
                 r0 = r6
               else
-                @index = i0
-                r0 = nil
+                r7 = _nt_reference
+                if r7
+                  r0 = r7
+                else
+                  @index = i0
+                  r0 = nil
+                end
               end
             end
           end
@@ -61,6 +68,29 @@ module Expression
     end
 
     node_cache[:expression][start_index] = r0
+
+    r0
+  end
+
+  def _nt_ws
+    start_index = index
+    if node_cache[:ws].has_key?(index)
+      cached = node_cache[:ws][index]
+      if cached
+        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+        @index = cached.interval.end
+      end
+      return cached
+    end
+
+    if has_terminal?('\G[\\s]', true, index)
+      r0 = instantiate_node(SyntaxNode,input, index...(index + 1))
+      @index += 1
+    else
+      r0 = nil
+    end
+
+    node_cache[:ws][start_index] = r0
 
     r0
   end
@@ -1909,29 +1939,6 @@ module Expression
     end
 
     node_cache[:grouped_expression][start_index] = r0
-
-    r0
-  end
-
-  def _nt_ws
-    start_index = index
-    if node_cache[:ws].has_key?(index)
-      cached = node_cache[:ws][index]
-      if cached
-        cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
-        @index = cached.interval.end
-      end
-      return cached
-    end
-
-    if has_terminal?('\G[\\s]', true, index)
-      r0 = instantiate_node(SyntaxNode,input, index...(index + 1))
-      @index += 1
-    else
-      r0 = nil
-    end
-
-    node_cache[:ws][start_index] = r0
 
     r0
   end

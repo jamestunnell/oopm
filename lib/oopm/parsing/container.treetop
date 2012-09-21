@@ -1,0 +1,43 @@
+module OOPM
+module Parsing
+
+grammar Container
+  rule container
+    (array / hash)
+    {
+      include NodeType
+      def node_type; NODE_TYPE_CONTAINER; end;
+    }
+  end
+  
+  rule hash
+    "{"
+    entries:(
+      (
+        first_entry:(ws* key:expression ws* "=>" ws* value:expression)
+        more_entries:(ws* "," ws* key:expression ws* "=>" ws* value:expression)*
+        ws* ","? ws*
+      ) /
+      ( ws* )
+    )
+    "}"
+    <HashNode>
+  end
+  
+  rule array
+    "["
+    entries:(
+      (
+        first_entry:(ws* value:expression)
+        more_entries:(ws* "," ws* value:expression)*
+        ws* ","? ws*
+      ) /
+      ( ws* )
+    )
+    "]"
+    <ArrayNode>
+  end
+end
+
+end
+end
