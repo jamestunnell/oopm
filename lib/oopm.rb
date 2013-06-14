@@ -1,5 +1,7 @@
 require 'oopm/version'
 
+require 'oopm/instructions/natural'
+
 require 'oopm/assembly/instruction'
 require 'oopm/assembly/literal'
 require 'oopm/assembly/reference'
@@ -18,3 +20,5 @@ require 'oopm/parsing/expression'
 require 'oopm/parsing/expression_nodes'
 
 require 'oopm/util/unique_name'
+
+require 'oopm/processing/bytecode_processor'

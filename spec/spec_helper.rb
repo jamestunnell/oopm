@@ -1,4 +1,5 @@
 require 'rspec'
-require 'oopm/version'
+require 'oopm'
+require 'pry'
 
-include Oopm
+include OOPM
