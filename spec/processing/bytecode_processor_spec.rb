@@ -19,6 +19,11 @@ describe OOPM::Processing::BytecodeProcessor do
           [0x11, 0x22, 0x3456789],
           [0x9876543210, 0x791098471057183047, 0x734, 0x28138, 0x991]
         ]
+        
+        @byte_sequences = [
+          (1..8).to_a,
+          (0..100).step(4).to_a.reverse,
+        ]
       end
       
       it 'should correctly process bytecode for a single natural number' do
@@ -48,6 +53,24 @@ describe OOPM::Processing::BytecodeProcessor do
         end
       end
 
+    end
+    
+    context 'bytecode for byte sequences' do
+      before :all do
+        @byte_sequences = [
+          (1..8).to_a,
+          (0..100).step(4).to_a.reverse,
+        ]
+      end
+      
+      it 'should correctly process bytecode for a byte sequece' do
+        @byte_sequences.each do |byte_sequence|
+          bp = OOPM::Processing::BytecodeProcessor.new
+          bytecode = Instructions::ByteSequence.make_bytecode byte_sequence
+          bp.process_bytecode bytecode, 0
+          bp.results.first.should eq byte_sequence
+        end
+      end
     end
   end
 end
