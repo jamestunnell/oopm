@@ -3,12 +3,17 @@ module Instructions
 
 class Natural
   CODE = 0x4E # 'N' in ASCII
+  MIN = 0
+  MAX = 256 ** 256
+  RANGE = MIN..MAX
   
   def self.make_bytecode natural
+    unless RANGE.include? natural
+      raise ArgumentError, "RANGE does not include #{natural}"
+    end
+    
     if natural == 0
       return [CODE, 1, 0]
-    elsif natural < 0
-      raise ArgumentError, "natural #{natural} is less than 0"
     end
     
     bytes = []
@@ -25,21 +30,29 @@ class Natural
     if bytecode[offset] != CODE
       raise ArgumentError, "bytecode does not begin with #{CODE}"
     end
+    offset += 1
     
-    nat_size = bytecode[offset + 1]
-    remaining = (bytecode.size - offset + 1)
-    
+    nat_size = bytecode[offset]
+    offset += 1
+
+    remaining = (bytecode.size - offset)    
     if remaining < nat_size
       raise ArgumentError, "bytecode does not contain enough information to process a NATURAL instruction"
     end
     
-    result = 0
-    nat_size.times do |n|
-      byte = bytecode[offset + 2 + n]
-      result += byte * 256**(nat_size - 1 - n)
-    end
+    natural = self.byte_seq_to_natural bytecode[offset, nat_size]
+    offset += nat_size
     
-    return result, offset + 2 + nat_size
+    return natural, offset
+  end
+  
+  def self.byte_seq_to_natural byte_seq
+    natural = 0
+    byte_seq.each_index do |n|
+      byte = byte_seq[n]
+      natural += byte * 256**(byte_seq.size - 1 - n)
+    end
+    return natural
   end
 end
 

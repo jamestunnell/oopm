@@ -28,20 +28,28 @@ describe OOPM::Instructions::Integer do
       end
     end
 
-    it "should add byte for the sign after the instruction code byte" do
+    it "should add byte for the sign and size after the instruction code byte" do
       @bytecodes.each do |int, bytecode|
-        sign_byte = bytecode[1]
+        #check sign bit
+        second_byte = bytecode[1]
         if int >= 0
-          sign_byte.should eq 0
+          (second_byte & 0x80).should eq 0
         else
-          sign_byte.should eq 1
+          (second_byte & 0x80).should eq 0x80
         end
+        
+        #check size bits
+        (bytecode.size - 2).should eq(second_byte & 0x7F)
       end
     end
-
-    it "should add the magnitude (as a natural) after the sign byte" do
+    
+    it "should add the magnitude after the sign/size byte" do
       @bytecodes.each do |int, bytecode|
-        results = Instructions::Natural.read_bytecode bytecode, 2
+        bc = bytecode.clone
+        bc[0] = Instructions::Natural::CODE
+        bc[1] &= 0x7F
+        
+        results = Instructions::Natural.read_bytecode bc, 0
         results[0].should eq int.abs
       end
     end
