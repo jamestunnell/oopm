@@ -19,11 +19,6 @@ describe OOPM::Processing::BytecodeProcessor do
           [0x11, 0x22, 0x3456789],
           [0x9876543210, 0x791098471057183047, 0x734, 0x28138, 0x991]
         ]
-        
-        @byte_sequences = [
-          (1..8).to_a,
-          (0..100).step(4).to_a.reverse,
-        ]
       end
       
       it 'should correctly process bytecode for a single natural number' do
@@ -72,5 +67,36 @@ describe OOPM::Processing::BytecodeProcessor do
         end
       end
     end
+    
+    context 'bytecode for integers' do
+      before :all do    
+        @integers = [-100, 100, -28555811294, 491847429 ]
+      end
+      
+      it 'should correctly process bytecode for integers' do
+        @integers.each do |integer|
+          bp = OOPM::Processing::BytecodeProcessor.new
+          bytecode = Instructions::Integer.make_bytecode integer
+          bp.process_bytecode bytecode, 0
+          bp.results.first.should eq integer
+        end
+      end
+    end
+
+    context 'bytecode for reals' do
+      before :all do    
+        @reals = [-5.678, 200.1, -2855.5811294e33, 4.91847429e120 ]
+      end
+      
+      it 'should correctly process bytecode for integers' do
+        @reals.each do |real|
+          bp = OOPM::Processing::BytecodeProcessor.new
+          bytecode = Instructions::Real.make_bytecode real
+          bp.process_bytecode bytecode, 0
+          bp.results.first.should eq real
+        end
+      end
+    end
+
   end
 end

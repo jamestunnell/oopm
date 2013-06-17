@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe OOPM::Instructions::ByteSequence do
+describe OOPM::Instructions::Integer do
   describe '.make_bytecode' do
     before :all do
       @code = Instructions::Integer::CODE
