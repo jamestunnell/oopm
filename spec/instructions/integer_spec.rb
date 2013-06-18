@@ -22,8 +22,9 @@ describe OOPM::Instructions::Integer do
     
     it "should produce bytecode that can be read to get back the original value" do
       @cases.each do |int|
-        bytecode = Instructions::Integer.make_bytecode int
-        int_2 = Instructions::Integer::read_bytecode(bytecode, 0)[0]
+        bytecode = Instructions::Integer.make_into_bytecode int
+        bytestream = ArrayStream.new bytecode
+        int_2 = Instructions::Integer::make_from_bytestream bytestream
         int_2.should eq int
       end
     end

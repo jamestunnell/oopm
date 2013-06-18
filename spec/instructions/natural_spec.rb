@@ -17,8 +17,9 @@ describe OOPM::Instructions::Natural do
     
     it "should produce bytecode that can be read to get back the original value" do
       @cases.each do |natural|
-        bytecode = Instructions::Natural.make_bytecode natural
-        natural2 = Instructions::Natural::read_bytecode(bytecode, 0)[0]
+        bytecode = Instructions::Natural.make_into_bytecode natural
+        stream = ArrayStream.new bytecode
+        natural2 = Instructions::Natural::make_from_bytestream(stream)
         natural2.should eq natural
       end
     end

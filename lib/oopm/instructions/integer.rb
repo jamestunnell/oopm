@@ -4,7 +4,7 @@ module Instructions
 class Integer
   CODE = 0x5A # 'Z' in ASCII
   
-  def self.make_bytecode int
+  def self.make_into_bytecode int
     natural = int.abs
     bytes = []
     while natural > 0
@@ -31,37 +31,34 @@ class Integer
     return bytecode
   end
   
-  def self.read_bytecode bytecode, offset
-    if bytecode[offset] != CODE
+  def self.make_from_bytestream bytestream
+    if bytestream.read_byte != CODE
       raise ArgumentError, "bytecode does not begin with #{CODE}"
     end
-    offset += 1
     
-    sign = bytecode[offset] & 0x80
-    more_size_bytes = bytecode[offset] & 0x40
-    count = bytecode[offset] & 0x3F
+    header = bytestream.read_byte
+    sign = header & 0x80
+    more_size_bytes = header & 0x40
+    count = header & 0x3F
     shift = 6
-    offset += 1
     
     while more_size_bytes != 0
-      more_size_bytes = bytecode[offset] & 0x80
-      count |= (bytecode[offset] & 0x7F) << shift
+      header = bytestream.read_byte
+      more_size_bytes = header & 0x80
+      count |= (header & 0x7F) << shift
       shift += 7
-      offset += 1
     end
     
-    remaining = (bytecode.size - offset)
-    if remaining < count
+    if bytestream.remaining < count
       raise ArgumentError, "bytecode does not contain enough information to process an INTEGER instruction"
     end
     
-    natural = self.byte_seq_to_natural_little_endian bytecode[offset, count]
-    offset += count
+    natural = self.byte_seq_to_natural_little_endian bytestream.read_bytes count
     
     if sign == 0
-      return natural, offset
+      return natural
     else
-      return -natural, offset
+      return -natural
     end
   end
   

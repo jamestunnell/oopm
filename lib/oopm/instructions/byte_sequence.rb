@@ -4,27 +4,24 @@ module Instructions
 class ByteSequence
   CODE = 0x42 # 'B' in ASCII
   
-  def self.make_bytecode bytes
+  def self.make_into_bytecode bytes
     oob = bytes.select {|b| b > 0xFF }
     if oob.any?
       raise ArgumentError, "bytes contains #{oob.count} numbers that are greater than 0xFF"
     end
     
-    size_bytecode = Natural.make_bytecode bytes.size
+    size_bytecode = Natural.make_into_bytecode bytes.size
     return [CODE] + size_bytecode + bytes
   end
   
-  def self.read_bytecode bytecode, offset
-    if bytecode[offset] != CODE
+  def self.make_from_bytestream bytestream
+    if bytestream.read_byte != CODE
       raise ArgumentError, "bytecode does not begin with #{CODE}"
     end
     
-    results = Instructions::Natural.read_bytecode bytecode, offset + 1
-    size = results[0]
-    offset = results[1]
-    
-    byte_sequence = bytecode[offset, size]
-    return byte_sequence, offset + size
+    size = Instructions::Natural.make_from_bytestream bytestream
+    byte_sequence = bytestream.read_bytes size
+    return byte_sequence
   end
 end
 

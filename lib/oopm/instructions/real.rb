@@ -4,7 +4,7 @@ module Instructions
 class Real
   CODE = 0x52 # 'R' in ASCII
   
-  def self.make_bytecode real
+  def self.make_into_bytecode real
     unless real.is_a? Float
       raise ArgumentError, "#{real} is not a Float"
     end
@@ -49,26 +49,20 @@ class Real
       end      
     end
     
-    bc = [CODE] + Integer.make_bytecode(num) + Integer.make_bytecode(pow_10)
+    bc = [CODE] + Integer.make_into_bytecode(num) + Integer.make_into_bytecode(pow_10)
     return bc
   end
   
-  def self.read_bytecode bytecode, offset
-    if bytecode[offset] != CODE
+  def self.make_from_bytestream bytestream
+    if bytestream.read_byte != CODE
       raise ArgumentError, "bytecode does not begin with #{CODE}"
     end
-    offset += 1
     
-    results = Instructions::Integer.read_bytecode bytecode, offset
-    num = results[0]
-    offset = results[1]
+    num = Instructions::Integer.make_from_bytestream bytestream
+    pow_10 = Instructions::Integer.make_from_bytestream bytestream
     
-    results = Instructions::Integer.read_bytecode bytecode, offset
-    pow_10 = results[0]
-    offset = results[1]
-    
-    real = num * 10**pow_10
-    return real, offset
+    real = num * 10.0**pow_10
+    return real
   end
 end
 

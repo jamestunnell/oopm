@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 require 'pry'
-describe OOPM::Processing::BytecodeProcessor do
+describe OOPM::Processing::ByteStreamProcessor do
   describe '#process_bytes' do
     context 'bytecode for natural numbers' do
       before :all do
@@ -23,25 +23,23 @@ describe OOPM::Processing::BytecodeProcessor do
       
       it 'should correctly process bytecode for a single natural number' do
         @single_naturals.each do |natural|
-          bp = OOPM::Processing::BytecodeProcessor.new
-          bytes = Instructions::Natural.make_bytecode natural
-          bp.process_bytecode bytes, 0
-          bp.results.first.should eq natural
+          bytes = Instructions::Natural.make_into_bytecode natural
+          bytestream = ArrayStream.new bytes
+          bp = OOPM::Processing::ByteStreamProcessor.new bytestream
+          bp.process_next.should eq natural
         end
       end
 
       it 'should correctly process bytecode for multiple natural numbers' do
         @multiple_naturals.each do |naturals|
-          bp = OOPM::Processing::BytecodeProcessor.new
-          
           bytes = []
           naturals.each do |natural|
-            bytes += Instructions::Natural.make_bytecode natural
+            bytes += Instructions::Natural.make_into_bytecode natural
           end
           
-          offset = 0
+          bp = OOPM::Processing::ByteStreamProcessor.new ArrayStream.new(bytes)
           naturals.count.times do
-            offset = bp.process_bytecode bytes, offset
+            bp.process_next
           end
           
           bp.results.should eq naturals
@@ -60,10 +58,9 @@ describe OOPM::Processing::BytecodeProcessor do
       
       it 'should correctly process bytecode for a byte sequece' do
         @byte_sequences.each do |byte_sequence|
-          bp = OOPM::Processing::BytecodeProcessor.new
-          bytecode = Instructions::ByteSequence.make_bytecode byte_sequence
-          bp.process_bytecode bytecode, 0
-          bp.results.first.should eq byte_sequence
+          bytecode = Instructions::ByteSequence.make_into_bytecode byte_sequence
+          bp = OOPM::Processing::ByteStreamProcessor.new ArrayStream.new(bytecode)
+          bp.process_next.should eq byte_sequence
         end
       end
     end
@@ -75,25 +72,25 @@ describe OOPM::Processing::BytecodeProcessor do
       
       it 'should correctly process bytecode for integers' do
         @integers.each do |integer|
-          bp = OOPM::Processing::BytecodeProcessor.new
-          bytecode = Instructions::Integer.make_bytecode integer
-          bp.process_bytecode bytecode, 0
-          bp.results.first.should eq integer
+          bytecode = Instructions::Integer.make_into_bytecode integer
+          bytestream = ArrayStream.new(bytecode)
+          bp = OOPM::Processing::ByteStreamProcessor.new bytestream
+          bp.process_next.should eq integer
         end
       end
     end
-
+    
     context 'bytecode for reals' do
       before :all do    
-        @reals = [-5.678, 200.1, -2855.5811294e33, 4.91847429e120 ]
+        @reals = [-5.678, 200.02, -2855.5811294e33, 4.9184742e120 ]
       end
       
-      it 'should correctly process bytecode for integers' do
+      it 'should correctly process bytecode for real numbers' do
         @reals.each do |real|
-          bp = OOPM::Processing::BytecodeProcessor.new
-          bytecode = Instructions::Real.make_bytecode real
-          bp.process_bytecode bytecode, 0
-          bp.results.first.should eq real
+          bytecode = Instructions::Real.make_into_bytecode real
+          bytestream = ArrayStream.new(bytecode)
+          bp = OOPM::Processing::ByteStreamProcessor.new bytestream
+          bp.process_next.should eq real
         end
       end
     end
