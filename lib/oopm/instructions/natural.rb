@@ -3,27 +3,32 @@ module Instructions
 
 class Natural
   CODE = 0x4E # 'N' in ASCII
-  MIN = 0
-  MAX = 256 ** 256
-  RANGE = MIN..MAX
-  
+
   def self.make_bytecode natural
-    unless RANGE.include? natural
-      raise ArgumentError, "RANGE does not include #{natural}"
-    end
-    
-    if natural == 0
-      return [CODE, 1, 0]
+    if natural < 0
+      raise ArgumentError, "natural number must be >= 0"
     end
     
     bytes = []
-    
     while natural > 0
       bytes.push natural & 0xFF
       natural >>= 8
     end
     
-    return [CODE, bytes.size] + bytes.reverse
+    count = bytes.count
+    more_size_bytes = count > 2**7 ? 0x80 : 0
+    
+    bytecode = [CODE, more_size_bytes | bytes.count]
+    count >>= 7
+    
+    while count > 0
+      more_size_bytes = count > 2**7 ? 0x80 : 0
+      bytecode.push more_size_bytes | (count & 0x7F)
+      count >>= 7
+    end
+    
+    bytecode += bytes
+    return bytecode
   end
   
   def self.read_bytecode bytecode, offset
@@ -32,25 +37,34 @@ class Natural
     end
     offset += 1
     
-    nat_size = bytecode[offset]
+    more_size_bytes = bytecode[offset] & 0x80
+    count = bytecode[offset] & 0x7F
+    shift = 7
     offset += 1
-
-    remaining = (bytecode.size - offset)    
-    if remaining < nat_size
-      raise ArgumentError, "bytecode does not contain enough information to process a NATURAL instruction"
+    
+    while more_size_bytes != 0
+      more_size_bytes = bytecode[offset] & 0x80
+      count |= (bytecode[offset] & 0x7F) << shift
+      shift += 7
+      offset += 1
     end
     
-    natural = self.byte_seq_to_natural bytecode[offset, nat_size]
-    offset += nat_size
+    remaining = (bytecode.size - offset)
+    if remaining < count
+      raise ArgumentError, "bytecode does not contain enough information to process an INTEGER instruction"
+    end
+    
+    natural = self.byte_seq_to_natural_little_endian bytecode[offset, count]
+    offset += count
     
     return natural, offset
   end
   
-  def self.byte_seq_to_natural byte_seq
+  def self.byte_seq_to_natural_little_endian byte_seq
     natural = 0
     byte_seq.each_index do |n|
       byte = byte_seq[n]
-      natural += byte * 256**(byte_seq.size - 1 - n)
+      natural += byte * 256**n
     end
     return natural
   end

@@ -15,8 +15,8 @@ describe OOPM::Instructions::Integer do
         -10,
         -51049199999,
         2**5000,
-        25**15000,
-        39**22000
+        25**150,
+        39**800
       ]
     end
     
