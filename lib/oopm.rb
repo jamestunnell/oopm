@@ -7,6 +7,7 @@ require 'oopm/instructions/numbers/numeric'
 require 'oopm/instructions/numbers/rational'
 require 'oopm/instructions/numbers/complex'
 require 'oopm/instructions/byte_sequence'
+require 'oopm/instructions/text'
 
 require 'oopm/assembly/instruction'
 require 'oopm/assembly/literal'
