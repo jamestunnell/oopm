@@ -3,6 +3,7 @@ require 'oopm/version'
 require 'oopm/instructions/natural'
 require 'oopm/instructions/integer'
 require 'oopm/instructions/real'
+require 'oopm/instructions/rational'
 require 'oopm/instructions/byte_sequence'
 
 require 'oopm/assembly/instruction'
