@@ -1,6 +1,4 @@
 require 'oopm/version'
-require 'oopm/byte_stream'
-require 'oopm/array_stream'
 
 require 'oopm/instructions/natural'
 require 'oopm/instructions/integer'
@@ -26,4 +24,7 @@ require 'oopm/parsing/expression_nodes'
 
 require 'oopm/util/unique_name'
 
-require 'oopm/processing/byte_stream_processor'
+require 'oopm/streams/byte_stream'
+require 'oopm/streams/array_stream'
+
+require 'oopm/processing/stream_processor'

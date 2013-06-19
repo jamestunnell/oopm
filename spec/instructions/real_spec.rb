@@ -20,7 +20,7 @@ describe OOPM::Instructions::Real do
     it "should produce bytecode that can be read to get back the original value" do
       @cases.each do |real|
         bytecode = Instructions::Real.make_into_bytecode real
-        stream = ArrayStream.new bytecode
+        stream = Streams::ArrayStream.new bytecode
         real2 = Instructions::Real::make_from_bytestream(stream)
         real2.should eq real
       end

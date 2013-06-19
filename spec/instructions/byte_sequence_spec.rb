@@ -16,7 +16,7 @@ describe OOPM::Instructions::ByteSequence do
     it "should produce bytecode that can be read to get back the original value" do
       @cases.each do |byte_seq|
         bytecode = Instructions::ByteSequence.make_into_bytecode byte_seq
-        bytestream = ArrayStream.new(bytecode)
+        bytestream = Streams::ArrayStream.new(bytecode)
         byte_seq2 = Instructions::ByteSequence::make_from_bytestream bytestream
         byte_seq2.should eq byte_seq
       end

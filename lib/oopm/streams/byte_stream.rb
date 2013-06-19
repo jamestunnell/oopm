@@ -1,4 +1,5 @@
 module OOPM
+module Streams
 
 # to properly mixin this module, you should define methods:
 #   size
@@ -36,4 +37,5 @@ module ByteStream
   end
 end
 
+end
 end

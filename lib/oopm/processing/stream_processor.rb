@@ -3,7 +3,7 @@ require 'pry'
 module OOPM
 module Processing
 
-class ByteStreamProcessor
+class StreamProcessor
   attr_reader :results
   
   def initialize bytestream

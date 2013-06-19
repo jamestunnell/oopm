@@ -1,5 +1,6 @@
 module OOPM
-  
+module Streams
+
 class ArrayStream
   include ByteStream
   attr_accessor :offset
@@ -22,4 +23,5 @@ class ArrayStream
   end
 end
 
+end
 end
