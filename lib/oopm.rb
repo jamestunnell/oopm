@@ -1,11 +1,11 @@
 require 'oopm/version'
 
-require 'oopm/instructions/natural'
-require 'oopm/instructions/integer'
-require 'oopm/instructions/real'
-require 'oopm/instructions/numeric'
-require 'oopm/instructions/rational'
-require 'oopm/instructions/complex'
+require 'oopm/instructions/numbers/natural'
+require 'oopm/instructions/numbers/integer'
+require 'oopm/instructions/numbers/real'
+require 'oopm/instructions/numbers/numeric'
+require 'oopm/instructions/numbers/rational'
+require 'oopm/instructions/numbers/complex'
 require 'oopm/instructions/byte_sequence'
 
 require 'oopm/assembly/instruction'
